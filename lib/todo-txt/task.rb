@@ -85,6 +85,20 @@ module Todo
     end
 
     # Compares the priorities of two tasks.
+    #
+    # Example:
+    #
+    #   task1 = Todo::Task.new "(A) Priority A."
+    #   task2 = Todo::Task.new "(B) Priority B."
+    #
+    #   task1 > task2
+    #   # => true
+    #
+    #   task1 == task2
+    #   # => false
+    #
+    #   task2 > task1
+    #   # => false
     def <=> other_task
       if self.priority.nil? and other_task.priority.nil?
         0
