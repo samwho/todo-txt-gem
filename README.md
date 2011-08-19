@@ -27,7 +27,7 @@ A `Todo::List` object encapsulates your todo.txt file. You initialise it by pass
 You can filter your todo list by priority, project, context or a combination of all three with ease.
 
 ``` ruby
-    require 'todo-txt
+    require 'todo-txt'
 
     list = Todo::List.new "path/to/todo.txt"
 
