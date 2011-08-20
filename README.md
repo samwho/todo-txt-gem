@@ -2,6 +2,8 @@
 
 This is a Ruby client library for Gina Trapani's [todo.txt](https://github.com/ginatrapani/todo.txt-cli/). It allows for easy parsing of task lists and tasks in the todo.txt format.
 
+Find the project on GitHub: [http://github.com/samwho/todo-txt-gem](http://github.com/samwho/todo-txt-gem).
+
 # Installation
 
 Installation is very simple. The project is packaged as a Ruby gem and can be installed by running:
@@ -14,11 +16,9 @@ Installation is very simple. The project is packaged as a Ruby gem and can be in
 
 A `Todo::List` object encapsulates your todo.txt file. You initialise it by passing the path to your todo.txt to the constructor:
 
-``` ruby
     require 'todo-txt'
 
     list = Todo::List.new "path/to/todo.txt"
-```
 
 `Todo::List` subclasses `Array` so it has all of the standard methods that are available on an array. It is, basically, an array of `Todo::Task` items.
 
@@ -26,7 +26,6 @@ A `Todo::List` object encapsulates your todo.txt file. You initialise it by pass
 
 You can filter your todo list by priority, project, context or a combination of all three with ease.
 
-``` ruby
     require 'todo-txt'
 
     list = Todo::List.new "path/to/todo.txt"
@@ -43,13 +42,11 @@ You can filter your todo list by priority, project, context or a combination of 
 
     # And you can combine these, like so
     list.by_project("+manhatten").by_priority("B")
-```
 
 ## Todo::Task
 
 A `Todo::Task` object can be created from a standard task string if you don't want to use the `Todo::List` approach (though using `Todo::List` is recommended).
 
-``` ruby
     require 'todo-txt'
 
     task = Todo::Task.new "(A) This task is top priority! +project @context"
@@ -68,13 +65,11 @@ A `Todo::Task` object can be created from a standard task string if you don't wa
 
     task.orig
     # => "(A) This task is top priority! +project @context"
-```
 
 ### Comparable
 
 The `Todo::Task` object includes the `Comparable` mixin. It compares with other tasks and sorts by priority in descending order.
 
-``` ruby
     task1 = Todo::Task.new "(A) Priority A."
     task2 = Todo::Task.new "(B) Priority B."
 
@@ -86,7 +81,6 @@ The `Todo::Task` object includes the `Comparable` mixin. It compares with other 
 
     task2 > task1
     # => false
-```
 
 Tasks without a priority will always be less than a task with a priority.
 
