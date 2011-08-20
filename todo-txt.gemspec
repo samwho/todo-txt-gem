@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
   # Add all files to the files parameter.
   s.files = []
   Dir["**/*.*"].each { |path| s.files.push path }
+  s.files.push ".gemtest"
 end
