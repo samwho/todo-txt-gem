@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = %q{todo-txt}
-  s.version = "0.1.1"
-  s.date = %q{2011-08-19}
+  s.version = "0.2"
+  s.date = %q{2012-03-31}
   s.authors = ["Sam Rose"]
   s.email = %q{samwho@lbak.co.uk}
   s.summary = %q{A client library for parsing todo.txt files.}
