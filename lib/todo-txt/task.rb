@@ -1,3 +1,5 @@
+require 'date'
+
 module Todo
   class Task
     include Comparable
@@ -15,6 +17,11 @@ module Todo
     # The regex used to match priorities.
     def self.priotity_regex
       /^\([A-Za-z]\)\s+/
+    end
+
+    # The regex used to match dates.
+    def self.date_regex
+      /(?:\([A-Za-z]\)\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
     end
 
     # Creates a new task. The argument that you pass in must be a string.
@@ -82,6 +89,45 @@ module Todo
         gsub(self.class.contexts_regex, '').
         gsub(self.class.projects_regex, '').
         strip
+    end
+
+    # Returns the date present in the task.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "(A) 2012-03-04 Task."
+    #   task.date
+    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #
+    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
+    # format. Dates in any other format will be classed as malformed and this
+    # method will return nil.
+    def date
+      begin
+        @date ||= Date.parse(orig.match(self.class.date_regex)[1])
+      rescue
+        @date = nil
+      end
+    end
+
+    # Checks whether or not this task is overdue by comparing the task date to
+    # the current date.
+    #
+    # If there is no date specified for this task, this method returns nil.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "(A) 2012-03-04 Task."
+    #   task.overdue?
+    #   #=> true
+    def overdue?
+      if date.nil?
+        nil
+      elsif date < Date.today
+        true
+      else
+        false
+      end
     end
 
     # Compares the priorities of two tasks.

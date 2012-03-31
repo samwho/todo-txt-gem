@@ -1,4 +1,5 @@
 require_relative '../spec_helper'
+require 'date'
 
 describe Todo::Task do
   it 'should recognise priorities' do
@@ -63,5 +64,40 @@ describe Todo::Task do
 
     assertion = task1 == task2
     assertion.should == true
+  end
+
+  it 'should be able to recognise dates' do
+    task = Todo::Task.new "(C) 2012-03-04 This has a date!"
+    task.date.should == Date.parse("4th March 2012")
+  end
+
+  it 'should be able to recognise dates without priority' do
+    task = Todo::Task.new "2012-03-04 This has a date!"
+    task.date.should == Date.parse("4th March 2012")
+  end
+
+  it 'should return nil if no date is present' do
+    task = Todo::Task.new "No date!"
+    task.date.should be_nil
+  end
+
+  it 'should not recognise malformed dates' do
+    task = Todo::Task.new "03-04-2012 This has a malformed date!"
+    task.date.should be_nil
+  end
+
+  it 'should be able to tell if the task is overdue' do
+    task = Todo::Task.new((Date.today - 1).to_s + " This task is overdue!")
+    task.overdue?.should be_true
+  end
+
+  it 'should return nil on overdue? if there is no date' do
+    task = Todo::Task.new "No date!"
+    task.overdue?.should be_nil
+  end
+
+  it 'should return nil on ridiculous date data' do
+    task = Todo::Task.new "2012-56-99 This has a malformed date!"
+    task.date.should be_nil
   end
 end
