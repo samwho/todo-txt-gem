@@ -38,7 +38,7 @@ describe Todo::Task do
   end
 
   it 'should be able to get just the text, no contexts etc.' do
-    task = Todo::Task.new "(B) This is a sweet task. @context +project"
+    task = Todo::Task.new "(B) 2012-03-04 This is a sweet task. @context +project"
     task.text.should == "This is a sweet task."
   end
 

@@ -85,6 +85,7 @@ module Todo
     #   task.text #=> "Testing!"
     def text
       @text ||= orig.
+        gsub(self.class.date_regex, '').
         gsub(self.class.priotity_regex, '').
         gsub(self.class.contexts_regex, '').
         gsub(self.class.projects_regex, '').
