@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{todo-txt}
-  s.version = "0.2"
+  s.version = "0.2.1"
   s.date = %q{2012-03-31}
   s.authors = ["Sam Rose"]
   s.email = %q{samwho@lbak.co.uk}
