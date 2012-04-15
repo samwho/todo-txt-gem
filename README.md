@@ -1,5 +1,8 @@
 # Todo.txt
 
+[![Development Build Status](https://secure.travis-ci.org/samwho/todo-txt-gem.png?branch=develop)](http://travis-ci.org/samwho/todo-txt-gem)
+[![Master Build Status](https://secure.travis-ci.org/samwho/todo-txt-gem.png?branch=master)](http://travis-ci.org/samwho/todo-txt-gem)
+
 This is a Ruby client library for Gina Trapani's [todo.txt](https://github.com/ginatrapani/todo.txt-cli/). It allows for easy parsing of task lists and tasks in the todo.txt format.
 
 Find the project on GitHub: [http://github.com/samwho/todo-txt-gem](http://github.com/samwho/todo-txt-gem).
