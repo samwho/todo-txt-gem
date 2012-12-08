@@ -21,7 +21,7 @@ module Todo
 
     # The regex used to match dates.
     def self.date_regex
-      /(?:\([A-Za-z]\)\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
+      /(?:\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
     end
 
     # The regex used to match completion.
