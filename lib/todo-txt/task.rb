@@ -21,7 +21,12 @@ module Todo
 
     # The regex used to match dates.
     def self.date_regex
-      /(?:\([A-Za-z]\)\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
+      /(?:\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
+    end
+
+    # The regex used to match completion.
+    def self.done_regex
+      /^x\s+/
     end
 
     # Creates a new task. The argument that you pass in must be a string.
@@ -85,6 +90,7 @@ module Todo
     #   task.text #=> "Testing!"
     def text
       @text ||= orig.
+        gsub(self.class.done_regex, '').
         gsub(self.class.date_regex, '').
         gsub(self.class.priotity_regex, '').
         gsub(self.class.contexts_regex, '').
@@ -129,6 +135,21 @@ module Todo
       else
         false
       end
+    end
+
+    # Returns if the task is done.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task.done?
+    #   #=> true
+    #
+    #   task = Todo::Task.new "Task."
+    #   task.done?
+    #   #=> false
+    def done?
+      @done ||= !(orig =~ self.class.done_regex).nil?
     end
 
     # Compares the priorities of two tasks.

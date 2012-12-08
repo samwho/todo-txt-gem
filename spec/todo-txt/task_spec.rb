@@ -38,7 +38,7 @@ describe Todo::Task do
   end
 
   it 'should be able to get just the text, no contexts etc.' do
-    task = Todo::Task.new "(B) 2012-03-04 This is a sweet task. @context +project"
+    task = Todo::Task.new "x (B) 2012-03-04 This is a sweet task. @context +project"
     task.text.should == "This is a sweet task."
   end
 
@@ -99,5 +99,20 @@ describe Todo::Task do
   it 'should return nil on ridiculous date data' do
     task = Todo::Task.new "2012-56-99 This has a malformed date!"
     task.date.should be_nil
+  end
+
+  it 'should be able to recognise completed tasks' do
+    task = Todo::Task.new "x 2012-12-08 This is done!"
+    task.done?.should be_true
+  end
+
+  it 'should not recognize incomplete tasks as done' do
+    task = Todo::Task.new "2012-12-08 This is ain't done!"
+    task.done?.should be_false
+  end
+
+  it 'should be able to recognise completion dates' do
+    task = Todo::Task.new "x 2012-12-08 This is done!"
+    task.date.should == Date.parse("8th December 2012")
   end
 end
