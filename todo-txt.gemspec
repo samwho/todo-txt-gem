@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{todo-txt}
-  s.version = "0.3"
+  s.version = "0.3.1"
   s.date = %q{2012-03-31}
   s.authors = ["Sam Rose"]
   s.email = %q{samwho@lbak.co.uk}
@@ -11,7 +11,5 @@ Gem::Specification.new do |s|
   s.license = 'GPL-2'
 
   # Add all files to the files parameter.
-  s.files = []
-  Dir["**/*.*"].each { |path| s.files.push path }
-  s.files.push ".gemtest"
+  s.files = `git ls-files`.split /\n/
 end
