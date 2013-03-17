@@ -1,5 +1,6 @@
 require_relative '../spec_helper'
 require 'date'
+require 'timecop'
 
 describe Todo::Task do
   it 'should recognise priorities' do
@@ -134,5 +135,41 @@ describe Todo::Task do
   it 'should be able to recognise completion dates' do
     task = Todo::Task.new "x 2012-12-08 This is done!"
     task.date.should == Date.parse("8th December 2012")
+  end
+
+  it 'should set the current completion dates when calling Task#do!' do
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.date.should == Date.parse("8th December 2013")
+    end
+  end
+
+  it 'should reset to the original due date when calling Task#undo!' do
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.undo!
+      task.date.should == Date.parse("8th December 2012")
+    end
+  end
+
+  it 'should reset to a nil date when calling Task#undo! if there was no original date' do
+    task = Todo::Task.new "This ain't done!"
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.undo!
+      task.date.should be_nil
+    end
+  end
+
+  it 'should manage dates when calling Task#toggle!' do
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    Timecop.freeze(2013, 12, 8) do
+      task.toggle!
+      task.date.should == Date.parse("8th December 2013")
+      task.toggle!
+      task.date.should == Date.parse("8th December 2012")
+    end
   end
 end

@@ -148,7 +148,7 @@ module Todo
       @done
     end
 
-    # Completes the task.
+    # Completes the task on the current date.
     #
     # Example:
     #
@@ -159,11 +159,14 @@ module Todo
     #   task.do!
     #   task.done?
     #   #=> true
+    #   task.date
+    #   #=> # the current date
     def do!
+      @orig_date, @date = @date, Date.today
       @done = true
     end
 
-    # Marks the task as incomplete.
+    # Marks the task as incomplete and resets its original due date.
     #
     # Example:
     #
@@ -174,7 +177,10 @@ module Todo
     #   task.undo!
     #   task.done?
     #   #=> false
+    #   task.date
+    #   #=> # <Date: 2012-03-04 (4911981/2,0,2299161)>
     def undo!
+      @date = @orig_date
       @done = false
     end
 
@@ -194,7 +200,7 @@ module Todo
     #   task.done?
     #   #=> true
     def toggle!
-      @done = !@done
+      done? ? undo! : do!
     end
     
     # Compares the priorities of two tasks.
