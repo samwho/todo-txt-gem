@@ -203,6 +203,22 @@ module Todo
       done? ? undo! : do!
     end
     
+    # Returns this task as a string.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "(A) 2012-12-08 Task"
+    #   task.to_s
+    #   #=> "(A) 2012-12-08 Task"
+    def to_s
+      priority_string = priority ? "(#{priority}) " : ""
+      done_string = done? ? "x " : ""
+      date_string = date ? "#{date} " : ""
+      contexts_string = contexts.empty? ? "" : " #{contexts.join ' '}"
+      projects_string = projects.empty? ? "" : " #{projects.join ' '}"
+      "#{done_string}#{priority_string}#{date_string}#{text}#{contexts_string}#{projects_string}"
+    end
+    
     # Compares the priorities of two tasks.
     #
     # Example:

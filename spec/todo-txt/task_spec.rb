@@ -137,6 +137,7 @@ describe Todo::Task do
     task.date.should == Date.parse("8th December 2012")
   end
 
+  # TODO: deal with priorities when doing/undoing a task.
   it 'should set the current completion dates when calling Task#do!' do
     task = Todo::Task.new "2012-12-08 This ain't done!"
     Timecop.freeze(2013, 12, 8) do
@@ -170,6 +171,29 @@ describe Todo::Task do
       task.date.should == Date.parse("8th December 2013")
       task.toggle!
       task.date.should == Date.parse("8th December 2012")
+    end
+  end
+
+  it 'should convert to a string' do
+    task = Todo::Task.new "(A) 2012-12-08 My task @test +test2"
+    task.to_s.should == "(A) 2012-12-08 My task @test +test2"
+  end
+  
+  it 'should show the current state when converted a string' do
+    task = Todo::Task.new "2012-12-08 My task @test +test2"
+    task.projects.clear
+    task.contexts << ["@test3"]
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.to_s.should == "x 2013-12-08 My task @test @test3"
+    end
+  end
+  
+  it 'should keep track of the original string after changing the task' do
+    task = Todo::Task.new "(A) 2012-12-08 My task @test +test2"
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.orig.should == "(A) 2012-12-08 My task @test +test2"
     end
   end
 end
