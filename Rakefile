@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'rspec/core/rake_task'
 
 task :default => [:test]
