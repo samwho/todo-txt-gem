@@ -107,7 +107,19 @@ describe Todo::Task do
   end
 
   it 'should not recognize incomplete tasks as done' do
-    task = Todo::Task.new "2012-12-08 This is ain't done!"
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    task.done?.should be_false
+  end
+
+  it 'should be completable' do
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    task.do!
+    task.done?.should be_true
+  end
+
+  it 'should be marked as incomplete' do
+    task = Todo::Task.new "x 2012-12-08 This is done!"
+    task.undo!
     task.done?.should be_false
   end
 

@@ -144,7 +144,38 @@ module Todo
     #   task.done?
     #   #=> false
     def done?
-      @done ||= !(orig =~ self.class.done_regex).nil?
+      @done = !(orig =~ self.class.done_regex).nil? if @done.nil?
+      @done
+    end
+
+    # Completes the task.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "2012-12-08 Task."
+    #   task.done?
+    #   #=> false
+    #
+    #   task.do!
+    #   task.done?
+    #   #=> true
+    def do!
+      @done = true
+    end
+
+    # Marks the task as incomplete.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task.done?
+    #   #=> true
+    #
+    #   task.undo!
+    #   task.done?
+    #   #=> false
+    def undo!
+      @done = false
     end
 
     # Compares the priorities of two tasks.
