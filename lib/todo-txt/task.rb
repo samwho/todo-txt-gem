@@ -33,6 +33,7 @@ module Todo
     def initialize task
       @orig = task
       @priority, @date = orig_priority, orig_date
+      @done = !(orig =~ self.class.done_regex).nil?
       @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
       @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
     end
@@ -43,9 +44,7 @@ module Todo
     #
     #   task = Todo::Task.new "(A) @context +project Hello!"
     #   task.orig #=> "(A) @context +project Hello!"
-    def orig
-      @orig
-    end
+    attr_reader :orig
 
     # Returns the priority, if any.
     #
@@ -56,29 +55,23 @@ module Todo
     #
     #   task = Todo::Task.new "Some task."
     #   task.priority #=> nil
-    def priority
-      @priority
-    end
+    attr_reader :priority
 
-    # Retrieves an array of all the @context annotations.
+    # Returns an array of all the @context annotations.
     #
     # Example:
     #
     #   task = Todo:Task.new "(A) @context Testing!"
     #   task.context #=> ["@context"]
-    def contexts
-      @contexts
-    end
+    attr_reader :contexts
 
-    # Retrieves an array of all the +project annotations.
+    # Returns an array of all the +project annotations.
     #
     # Example:
     #
     #   task = Todo:Task.new "(A) +test Testing!"
     #   task.projects #=> ["+test"]
-    def projects
-      @projects
-    end
+    attr_reader :projects
 
     # Gets just the text content of the todo, without the priority, contexts
     # and projects annotations.
@@ -139,7 +132,6 @@ module Todo
     #   task.done?
     #   #=> false
     def done?
-      @done = !(orig =~ self.class.done_regex).nil? if @done.nil?
       @done
     end
 
