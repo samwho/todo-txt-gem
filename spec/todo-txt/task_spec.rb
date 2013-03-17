@@ -138,20 +138,20 @@ describe Todo::Task do
   end
 
   it 'should remove the priority when calling Task#do!' do
-    task = Todo::Task.new "(A) This ain't done!"
+    task = Todo::Task.new "(A) Task"
     task.do!
     task.priority.should be_nil
   end
 
   it 'should reset to the original priority when calling Task#undo!' do
-    task = Todo::Task.new "(A) This ain't done!"
+    task = Todo::Task.new "(A) Task"
     task.do!
     task.undo!
     task.priority.should == "A"
   end
 
   it 'should set the current completion dates when calling Task#do!' do
-    task = Todo::Task.new "2012-12-08 This ain't done!"
+    task = Todo::Task.new "2012-12-08 Task"
     Timecop.freeze(2013, 12, 8) do
       task.do!
       task.date.should == Date.parse("8th December 2013")
@@ -159,20 +159,11 @@ describe Todo::Task do
   end
 
   it 'should reset to the original due date when calling Task#undo!' do
-    task = Todo::Task.new "2012-12-08 This ain't done!"
+    task = Todo::Task.new "2012-12-08 Task"
     Timecop.freeze(2013, 12, 8) do
       task.do!
       task.undo!
       task.date.should == Date.parse("8th December 2012")
-    end
-  end
-
-  it 'should reset to a nil date when calling Task#undo! if there was no original date' do
-    task = Todo::Task.new "This ain't done!"
-    Timecop.freeze(2013, 12, 8) do
-      task.do!
-      task.undo!
-      task.date.should be_nil
     end
   end
 
@@ -191,21 +182,21 @@ describe Todo::Task do
     task.to_s.should == "(A) 2012-12-08 My task @test +test2"
   end
   
-  it 'should show the current state when converted a string' do
+  it 'should keep track of the original string after changing the task' do
+    task = Todo::Task.new "(A) 2012-12-08 My task @test +test2"
+    Timecop.freeze(2013, 12, 8) do
+      task.do!
+      task.orig.should == "(A) 2012-12-08 My task @test +test2"
+    end
+  end
+  
+  it 'should show be modifiable' do
     task = Todo::Task.new "2012-12-08 My task @test +test2"
     task.projects.clear
     task.contexts << ["@test3"]
     Timecop.freeze(2013, 12, 8) do
       task.do!
       task.to_s.should == "x 2013-12-08 My task @test @test3"
-    end
-  end
-  
-  it 'should keep track of the original string after changing the task' do
-    task = Todo::Task.new "(A) 2012-12-08 My task @test +test2"
-    Timecop.freeze(2013, 12, 8) do
-      task.do!
-      task.orig.should == "(A) 2012-12-08 My task @test +test2"
     end
   end
 end
