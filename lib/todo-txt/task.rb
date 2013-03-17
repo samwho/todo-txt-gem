@@ -128,13 +128,8 @@ module Todo
     #   task.overdue?
     #   #=> true
     def overdue?
-      if date.nil?
-        nil
-      elsif date < Date.today
-        true
-      else
-        false
-      end
+      return nil if date.nil?
+      date < Date.today
     end
 
     # Returns if the task is done.
