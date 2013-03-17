@@ -32,8 +32,11 @@ module Todo
     # Creates a new task. The argument that you pass in must be a string.
     def initialize task
       @orig = task
+      @priority, @date = orig_priority, orig_date
+      @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
+      @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
     end
-
+    
     # Returns the original content of the task.
     #
     # Example:
@@ -54,11 +57,7 @@ module Todo
     #   task = Todo::Task.new "Some task."
     #   task.priority #=> nil
     def priority
-      @priority ||= if orig =~ self.class.priotity_regex
-        orig[1]
-      else
-        nil
-      end
+      @priority
     end
 
     # Retrieves an array of all the @context annotations.
@@ -68,7 +67,7 @@ module Todo
     #   task = Todo:Task.new "(A) @context Testing!"
     #   task.context #=> ["@context"]
     def contexts
-      @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
+      @contexts
     end
 
     # Retrieves an array of all the +project annotations.
@@ -78,7 +77,7 @@ module Todo
     #   task = Todo:Task.new "(A) +test Testing!"
     #   task.projects #=> ["+test"]
     def projects
-      @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
+      @projects
     end
 
     # Gets just the text content of the todo, without the priority, contexts
@@ -110,11 +109,7 @@ module Todo
     # format. Dates in any other format will be classed as malformed and this
     # method will return nil.
     def date
-      begin
-        @date ||= Date.parse(orig.match(self.class.date_regex)[1])
-      rescue
-        @date = nil
-      end
+      @date
     end
 
     # Checks whether or not this task is overdue by comparing the task date to
@@ -162,7 +157,8 @@ module Todo
     #   task.date
     #   #=> # the current date
     def do!
-      @orig_date, @date = @date, Date.today
+      @date = Date.today
+      @priority = nil
       @done = true
     end
 
@@ -180,7 +176,8 @@ module Todo
     #   task.date
     #   #=> # <Date: 2012-03-04 (4911981/2,0,2299161)>
     def undo!
-      @date = @orig_date
+      @date = orig_date
+      @priority = orig_priority
       @done = false
     end
 
@@ -244,6 +241,19 @@ module Todo
       else
         other_task.priority <=> self.priority
       end
+    end
+
+    private
+
+    def orig_priority
+      orig =~ self.class.priotity_regex ? orig[1] : nil
+    end
+
+    def orig_date
+      begin
+        return Date.parse(orig) if orig =~ self.class.date_regex
+      rescue; end
+      nil
     end
   end
 end

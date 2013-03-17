@@ -137,7 +137,19 @@ describe Todo::Task do
     task.date.should == Date.parse("8th December 2012")
   end
 
-  # TODO: deal with priorities when doing/undoing a task.
+  it 'should remove the priority when calling Task#do!' do
+    task = Todo::Task.new "(A) This ain't done!"
+    task.do!
+    task.priority.should be_nil
+  end
+
+  it 'should reset to the original priority when calling Task#undo!' do
+    task = Todo::Task.new "(A) This ain't done!"
+    task.do!
+    task.undo!
+    task.priority.should == "A"
+  end
+
   it 'should set the current completion dates when calling Task#do!' do
     task = Todo::Task.new "2012-12-08 This ain't done!"
     Timecop.freeze(2013, 12, 8) do
