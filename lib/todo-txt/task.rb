@@ -178,6 +178,25 @@ module Todo
       @done = false
     end
 
+    # Toggles the task from complete to incomplete or vice versa.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task.done?
+    #   #=> true
+    #
+    #   task.toggle!
+    #   task.done?
+    #   #=> false
+    #
+    #   task.toggle!
+    #   task.done?
+    #   #=> true
+    def toggle!
+      @done = !@done
+    end
+    
     # Compares the priorities of two tasks.
     #
     # Example:

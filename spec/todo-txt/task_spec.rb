@@ -123,6 +123,14 @@ describe Todo::Task do
     task.done?.should be_false
   end
 
+  it 'should be toggable' do
+    task = Todo::Task.new "2012-12-08 This ain't done!"
+    task.toggle!
+    task.done?.should be_true
+    task.toggle!
+    task.done?.should be_false
+  end
+
   it 'should be able to recognise completion dates' do
     task = Todo::Task.new "x 2012-12-08 This is done!"
     task.date.should == Date.parse("8th December 2012")
