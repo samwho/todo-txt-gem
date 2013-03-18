@@ -5,7 +5,7 @@ module Todo
     #
     #   /home/sam/Dropbox/todo/todo.txt
     #
-    # You would initialize this object like do:
+    # You would initialize this object like:
     #
     #   list = Todo::List.new "/home/sam/Dropbox/todo/todo-txt"
     #
