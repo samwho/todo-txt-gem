@@ -276,13 +276,6 @@ module Todo
       orig =~ self.class.priotity_regex ? orig[1] : nil
     end
 
-    def to_date(date)
-      begin
-        return Date.parse(date)
-      rescue; end
-      nil
-    end
-
     def orig_created_on
       begin
         if @orig =~ self.class.created_on_regex
@@ -293,11 +286,5 @@ module Todo
       nil
     end
 
-    def orig_date
-      begin
-        return Date.parse(orig) if orig =~ self.class.date_regex
-      rescue; end
-      nil
-    end
   end
 end
