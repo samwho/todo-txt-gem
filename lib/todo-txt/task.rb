@@ -144,19 +144,11 @@ module Todo
       @created_on
     end
 
-    # Checks whether or not this task is overdue by comparing the task date to
-    # the current date.
-    #
-    # If there is no date specified for this task, this method returns nil.
-    #
-    # Example:
-    #
-    #   task = Todo::Task.new "(A) 2012-03-04 Task."
-    #   task.overdue?
-    #   #=> true
+    # Not implemented
     def overdue?
-      return nil if date.nil?
-      date < Date.today
+      return nil
+      #return nil if date.nil?
+      #date < Date.today
     end
 
     # Returns if the task is done.
