@@ -127,7 +127,7 @@ module Todo
         strip
     end
 
-    # Returns the date present in the task.
+    # Returns the task's creation date, if any.
     #
     # Example:
     #
@@ -138,8 +138,10 @@ module Todo
     # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
     # format. Dates in any other format will be classed as malformed and this
     # method will return nil.
+    #
+    # Deprecated
     def date
-      @date
+      @created_on
     end
 
     # Checks whether or not this task is overdue by comparing the task date to
