@@ -34,8 +34,10 @@ module Todo
     end
 
     def get_completed_date
-      return nil if @orig !~ self.class.done_regex
-      Date.parse(self.class.done_regex.match(@orig)[1])
+      begin
+        return Date.parse(self.class.done_regex.match(@orig)[1])
+      rescue; end
+      nil
     end
 
     # Creates a new task. The argument that you pass in must be a string.

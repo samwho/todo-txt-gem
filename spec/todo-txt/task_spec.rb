@@ -214,6 +214,18 @@ describe Todo::Task do
     task.done?.should be false
   end
 
+  it 'should be not done with malformed date' do
+    task = Todo::Task.new "x 01-01-2013 This is not done"
+    task.done?.should be false
+    task.completed_on.should be nil
+  end
+
+  it 'should be not done with an invalid date' do
+    task = Todo::Task.new "x 2013-02-31 This is not done"
+    task.done?.should be false
+    task.completed_on.should be nil
+  end
+
   it 'should be done on 2013-04-22' do
     task = Todo::Task.new "x 2013-04-22 This is really done"
     task.done?.should be true
