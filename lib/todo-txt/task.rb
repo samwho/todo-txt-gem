@@ -45,7 +45,6 @@ module Todo
       @orig = task
       @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
       @priority, @created_on = orig_priority, orig_created_on
-      @done = !@completed_on.nil?
       @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
       @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
     end
@@ -170,7 +169,7 @@ module Todo
     #   task.done?
     #   #=> false
     def done?
-      @done
+      !@completed_on.nil?
     end
 
     # Completes the task on the current date.
@@ -189,7 +188,6 @@ module Todo
     def do!
       @completed_on = Date.today
       @priority = nil
-      @done = true
     end
 
     # Marks the task as incomplete and resets its original due date.
@@ -208,7 +206,6 @@ module Todo
     def undo!
       @completed_on = nil
       @priority = orig_priority
-      @done = false
     end
 
     # Toggles the task from complete to incomplete or vice versa.
