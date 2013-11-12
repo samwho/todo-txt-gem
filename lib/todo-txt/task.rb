@@ -24,20 +24,30 @@ module Todo
       /(?:\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
     end
 
+    def self.created_on_regex
+      /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
+    end
+
     # The regex used to match completion.
     def self.done_regex
-      /^x\s+/
+      /^x\s{1}(\d{4}-\d{2}-\d{2})\s+/
+    end
+
+    def get_completed_date
+      return nil if @orig !~ self.class.done_regex
+      Date.parse(self.class.done_regex.match(@orig)[1])
     end
 
     # Creates a new task. The argument that you pass in must be a string.
     def initialize task
       @orig = task
-      @priority, @date = orig_priority, orig_date
-      @done = !(orig =~ self.class.done_regex).nil?
+      @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
+      @priority, @created_on = orig_priority, orig_created_on
+      @done = !@completed_on.nil?
       @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
       @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
     end
-    
+
     # Returns the original content of the task.
     #
     # Example:
@@ -45,6 +55,32 @@ module Todo
     #   task = Todo::Task.new "(A) @context +project Hello!"
     #   task.orig #=> "(A) @context +project Hello!"
     attr_reader :orig
+
+    # Returns the task's creation date, if any.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "(A) 2012-03-04 Task."
+    #   task.created_on
+    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #
+    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
+    # format. Dates in any other format will be classed as malformed and this
+    # method will return nil.
+    attr_reader :created_on
+
+    # Returns the task's completion date if task is done.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "x 2012-03-04 Task."
+    #   task.completed_on
+    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #
+    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
+    # format. Dates in any other format will be classed as malformed and this
+    # method will return nil.
+    attr_reader :completed_on
 
     # Returns the priority, if any.
     #
@@ -83,8 +119,8 @@ module Todo
     def text
       @text ||= orig.
         gsub(self.class.done_regex, '').
-        gsub(self.class.date_regex, '').
         gsub(self.class.priotity_regex, '').
+        gsub(self.class.created_on_regex, '').
         gsub(self.class.contexts_regex, '').
         gsub(self.class.projects_regex, '').
         strip
@@ -149,7 +185,7 @@ module Todo
     #   task.date
     #   #=> # the current date
     def do!
-      @date = Date.today
+      @completed_on = Date.today
       @priority = nil
       @done = true
     end
@@ -168,7 +204,7 @@ module Todo
     #   task.date
     #   #=> # <Date: 2012-03-04 (4911981/2,0,2299161)>
     def undo!
-      @date = orig_date
+      @completed_on = nil
       @priority = orig_priority
       @done = false
     end
@@ -201,11 +237,11 @@ module Todo
     #   #=> "(A) 2012-12-08 Task"
     def to_s
       priority_string = priority ? "(#{priority}) " : ""
-      done_string = done? ? "x " : ""
-      date_string = date ? "#{date} " : ""
+      done_string = done? ? "x #{completed_on} " : ""
+      created_on_string = created_on ? "#{created_on} " : ""
       contexts_string = contexts.empty? ? "" : " #{contexts.join ' '}"
       projects_string = projects.empty? ? "" : " #{projects.join ' '}"
-      "#{done_string}#{priority_string}#{date_string}#{text}#{contexts_string}#{projects_string}"
+      "#{done_string}#{priority_string}#{created_on_string}#{text}#{contexts_string}#{projects_string}"
     end
     
     # Compares the priorities of two tasks.
@@ -239,6 +275,23 @@ module Todo
 
     def orig_priority
       orig =~ self.class.priotity_regex ? orig[1] : nil
+    end
+
+    def to_date(date)
+      begin
+        return Date.parse(date)
+      rescue; end
+      nil
+    end
+
+    def orig_created_on
+      begin
+        if @orig =~ self.class.created_on_regex
+          date = @orig.match self.class.created_on_regex
+          return Date.parse(date[1]) unless date.nil?
+        end
+      rescue; end
+      nil
     end
 
     def orig_date

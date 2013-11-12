@@ -39,7 +39,7 @@ describe Todo::Task do
   end
 
   it 'should be able to get just the text, no contexts etc.' do
-    task = Todo::Task.new "x (B) 2012-03-04 This is a sweet task. @context +project"
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context +project"
     task.text.should == "This is a sweet task."
   end
 
@@ -69,37 +69,37 @@ describe Todo::Task do
 
   it 'should be able to recognise dates' do
     task = Todo::Task.new "(C) 2012-03-04 This has a date!"
-    task.date.should == Date.parse("4th March 2012")
+    task.created_on.should == Date.parse("4th March 2012")
   end
 
   it 'should be able to recognise dates without priority' do
     task = Todo::Task.new "2012-03-04 This has a date!"
-    task.date.should == Date.parse("4th March 2012")
+    task.created_on.should == Date.parse("4th March 2012")
   end
 
   it 'should return nil if no date is present' do
     task = Todo::Task.new "No date!"
-    task.date.should be_nil
+    task.created_on.should be_nil
   end
 
   it 'should not recognise malformed dates' do
     task = Todo::Task.new "03-04-2012 This has a malformed date!"
-    task.date.should be_nil
+    task.created_on.should be_nil
   end
 
   it 'should be able to tell if the task is overdue' do
     task = Todo::Task.new((Date.today - 1).to_s + " This task is overdue!")
-    task.overdue?.should be_true
+    task.overdue?.should be_false
   end
 
   it 'should return nil on overdue? if there is no date' do
     task = Todo::Task.new "No date!"
-    task.overdue?.should be_nil
+    task.overdue?.should be_false
   end
 
   it 'should return nil on ridiculous date data' do
     task = Todo::Task.new "2012-56-99 This has a malformed date!"
-    task.date.should be_nil
+    task.created_on.should be_nil
   end
 
   it 'should be able to recognise completed tasks' do
@@ -124,6 +124,13 @@ describe Todo::Task do
     task.done?.should be_false
   end
 
+  it 'should be marked as incomplete without any date' do
+    task = Todo::Task.new "x 2012-12-08 This is done!"
+    task.undo!
+    task.completed_on.should be_nil
+    task.created_on.should be_nil
+  end
+
   it 'should be toggable' do
     task = Todo::Task.new "2012-12-08 This ain't done!"
     task.toggle!
@@ -134,7 +141,7 @@ describe Todo::Task do
 
   it 'should be able to recognise completion dates' do
     task = Todo::Task.new "x 2012-12-08 This is done!"
-    task.date.should == Date.parse("8th December 2012")
+    task.completed_on.should == Date.parse("8th December 2012")
   end
 
   it 'should remove the priority when calling Task#do!' do
@@ -154,7 +161,7 @@ describe Todo::Task do
     task = Todo::Task.new "2012-12-08 Task"
     Timecop.freeze(2013, 12, 8) do
       task.do!
-      task.date.should == Date.parse("8th December 2013")
+      task.completed_on.should == Date.parse("8th December 2013")
     end
   end
 
@@ -163,7 +170,7 @@ describe Todo::Task do
     Timecop.freeze(2013, 12, 8) do
       task.do!
       task.undo!
-      task.date.should == Date.parse("8th December 2012")
+      task.created_on.should == Date.parse("8th December 2012")
     end
   end
 
@@ -171,9 +178,11 @@ describe Todo::Task do
     task = Todo::Task.new "2012-12-08 This ain't done!"
     Timecop.freeze(2013, 12, 8) do
       task.toggle!
-      task.date.should == Date.parse("8th December 2013")
+      task.completed_on.should == Date.parse("8th December 2013")
+      task.created_on.should == Date.parse("8th December 2012")
       task.toggle!
-      task.date.should == Date.parse("8th December 2012")
+      task.created_on.should == Date.parse("8th December 2012")
+      task.completed_on.should be_nil
     end
   end
 
@@ -196,7 +205,18 @@ describe Todo::Task do
     task.contexts << ["@test3"]
     Timecop.freeze(2013, 12, 8) do
       task.do!
-      task.to_s.should == "x 2013-12-08 My task @test @test3"
+      task.to_s.should == "x 2013-12-08 2012-12-08 My task @test @test3"
     end
+  end
+
+  it 'should be not done with missing date' do
+    task = Todo::Task.new "x This is not done"
+    task.done?.should be false
+  end
+
+  it 'should be done on 2013-04-22' do
+    task = Todo::Task.new "x 2013-04-22 This is really done"
+    task.done?.should be true
+    task.completed_on.should == Date.parse('22th April 2013')
   end
 end
