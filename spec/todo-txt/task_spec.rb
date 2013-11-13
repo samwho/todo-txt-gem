@@ -13,6 +13,11 @@ describe Todo::Task do
     task.priority.should == nil
   end
 
+  it 'should recognize priorities around dates' do
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context +project"
+    task.priority.should == "B"
+  end
+
   it 'should recognise contexts' do
     task = Todo::Task.new "Hello, world! @test"
     task.contexts.should == ["@test"]

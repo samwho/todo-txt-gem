@@ -15,8 +15,8 @@ module Todo
     end
 
     # The regex used to match priorities.
-    def self.priotity_regex
-      /^\([A-Za-z]\)\s+/
+    def self.priority_regex
+      /(?:^|\s+)\(([A-Za-z])\)\s+/
     end
 
     # The regex used to match dates.
@@ -121,7 +121,7 @@ module Todo
     def text
       @text ||= orig.
         gsub(self.class.done_regex, '').
-        gsub(self.class.priotity_regex, '').
+        gsub(self.class.priority_regex, '').
         gsub(self.class.created_on_regex, '').
         gsub(self.class.contexts_regex, '').
         gsub(self.class.projects_regex, '').
@@ -268,7 +268,7 @@ module Todo
     private
 
     def orig_priority
-      orig =~ self.class.priotity_regex ? orig[1] : nil
+      @orig.match(self.class.priority_regex)[1] if @orig =~ self.class.priority_regex
     end
 
     def orig_created_on
