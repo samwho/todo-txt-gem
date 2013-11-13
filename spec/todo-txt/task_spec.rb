@@ -236,4 +236,53 @@ describe Todo::Task do
     task.done?.should be true
     task.completed_on.should == Date.parse('22th April 2013')
   end
+
+  its 'should have a due date' do
+    task = Todo::Task.new '(A) this task has due date due:2013-12-22'
+    task.due_on.should_not be_nil
+  end
+
+  it 'should due on 2013-12-22' do
+    task = Todo::Task.new '(A) this task has due date due:2013-12-22'
+    task.due_on.should == Date.parse('22th December 2013')
+  end
+
+  it 'should not be overdue on 2013-12-01' do
+    task = Todo::Task.new '(A) this task has due date due:2013-12-22'
+    Timecop.freeze(2013, 12, 01) do
+      task.overdue?.should be_false
+    end
+  end
+
+  it 'should be overdue on 2013-12-23' do
+    task = Todo::Task.new '(A) this task has due date due:2013-12-22'
+    Timecop.freeze(2013, 12, 23) do
+      task.overdue?.should be_true
+    end
+  end
+
+  it 'should be able to get just the text, no due date etc.' do
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-01-01 +project"
+    task.text.should == "This is a sweet task."
+  end
+
+  it 'should convert to a string with due date' do
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-01-01 +project"
+    task.to_s.should == "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context +project due:2012-01-01"
+  end
+
+  it 'should have no due date with malformed date' do
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:01-01-2012 +project"
+    task.due_on.should be_nil
+  end
+
+  it 'should have no due date with invalid date' do
+    task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-02-31 +project"
+    task.due_on.should be_nil
+  end
+
+  it 'should recognize DUE:2013-12-22 (case insensitive)' do
+    task = Todo::Task.new '(A) this task has due date DUE:2013-12-22'
+    task.due_on.should == Date.parse('22th December 2013')
+  end
 end

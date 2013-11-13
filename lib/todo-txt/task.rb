@@ -34,9 +34,21 @@ module Todo
       /^x\s+(\d{4}-\d{2}-\d{2})\s+/
     end
 
+    # The regex used to match due date.
+    def self.due_on_regex
+      /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
+    end
+
     def get_completed_date
       begin
         return Date.parse(self.class.done_regex.match(@orig)[1])
+      rescue; end
+      nil
+    end
+
+    def get_due_on_date
+      begin
+        return Date.parse(self.class.due_on_regex.match(@orig)[1])
       rescue; end
       nil
     end
@@ -46,6 +58,7 @@ module Todo
       @orig = task
       @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
       @priority, @created_on = orig_priority, orig_created_on
+      @due_on = get_due_on_date
       @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
       @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
     end
@@ -68,7 +81,7 @@ module Todo
     #
     # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
     # format. Dates in any other format will be classed as malformed and this
-    # method will return nil.
+    # attribute will be nil.
     attr_reader :created_on
 
     # Returns the task's completion date if task is done.
@@ -81,8 +94,21 @@ module Todo
     #
     # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
     # format. Dates in any other format will be classed as malformed and this
-    # method will return nil.
+    # attribute will be nil.
     attr_reader :completed_on
+
+    # Returns the task's due date, if any.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new "(A) This is a task. due:2012-03-04"
+    #   task.due_on
+    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #
+    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
+    # format. Dates in any other format will be classed as malformed and this
+    # attribute will be nil.
+    attr_reader :due_on
 
     # Returns the priority, if any.
     #
@@ -125,6 +151,7 @@ module Todo
         gsub(self.class.created_on_regex, '').
         gsub(self.class.contexts_regex, '').
         gsub(self.class.projects_regex, '').
+        gsub(self.class.due_on_regex, '').
         strip
     end
 
@@ -147,9 +174,8 @@ module Todo
 
     # Not implemented
     def overdue?
-      return nil
-      #return nil if date.nil?
-      #date < Date.today
+      return true if !due_on.nil? && due_on < Date.today
+      false
     end
 
     # Returns if the task is done.
@@ -235,7 +261,8 @@ module Todo
       created_on_string = created_on ? "#{created_on} " : ""
       contexts_string = contexts.empty? ? "" : " #{contexts.join ' '}"
       projects_string = projects.empty? ? "" : " #{projects.join ' '}"
-      "#{done_string}#{priority_string}#{created_on_string}#{text}#{contexts_string}#{projects_string}"
+      due_on_string = due_on.nil? ? "" : " due:#{due_on}"
+      "#{done_string}#{priority_string}#{created_on_string}#{text}#{contexts_string}#{projects_string}#{due_on_string}"
     end
     
     # Compares the priorities of two tasks.
