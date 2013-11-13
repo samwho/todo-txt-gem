@@ -1,4 +1,5 @@
 require 'date'
+require 'logger'
 
 module Todo
   class Task
@@ -55,6 +56,8 @@ module Todo
 
     # Creates a new task. The argument that you pass in must be a string.
     def initialize task
+      @logger = defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
+
       @orig = task
       @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
       @priority, @created_on = orig_priority, orig_created_on
@@ -137,6 +140,10 @@ module Todo
     #   task.projects #=> ["+test"]
     attr_reader :projects
 
+    # Logger
+    #
+    attr_accessor :logger
+
     # Gets just the text content of the todo, without the priority, contexts
     # and projects annotations.
     #
@@ -169,6 +176,8 @@ module Todo
     #
     # Deprecated
     def date
+      @logger.warn("Task#date is deprecated, use created_on instead.")
+
       @created_on
     end
 
