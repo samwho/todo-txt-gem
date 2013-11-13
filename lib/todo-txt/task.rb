@@ -24,6 +24,7 @@ module Todo
       /(?:\s+|^)([0-9]{4}-[0-9]{2}-[0-9]{2})/
     end
 
+    # The regex used to match creation date.
     def self.created_on_regex
       /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
     end
