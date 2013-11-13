@@ -30,7 +30,7 @@ module Todo
 
     # The regex used to match completion.
     def self.done_regex
-      /^x\s{1}(\d{4}-\d{2}-\d{2})\s+/
+      /^x\s+(\d{4}-\d{2}-\d{2})\s+/
     end
 
     def get_completed_date
