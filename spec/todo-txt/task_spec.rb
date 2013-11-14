@@ -292,11 +292,11 @@ describe Todo::Task do
   end
 
   it 'should call @logger.warn if #date called as deprecated method' do
+    logger = double(Logger)
+    Todo::Logger.logger = logger
+
     task = Todo::Task.new "x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-02-31 +project"
     error_message = 'Task#date is deprecated, use created_on instead.'
-
-    logger = double(Logger)
-    task.logger = logger
 
     logger.should_receive(:warn).with(error_message)
     task.date
