@@ -1,9 +1,11 @@
 require_relative '../spec_helper'
 
 describe Todo::List do
-  # A helper method to grab the test data list.
-  def list
-    Todo::List.new(File.dirname(__FILE__) + '/../data/todo.txt')
+  let(:path) { File.dirname(__FILE__) + '/../data/todo.txt' }
+  let(:list) { Todo::List.new(path) }
+
+  it 'should have the correct path' do
+    list.path.should == path
   end
 
   it 'should grab a list of Todo::Tasks' do
@@ -68,5 +70,16 @@ describe Todo::List do
     # Class should still be Todo::List
     # This assertion currently fails. TODO.
     # list.sort.should be_a Todo::List
+  end
+
+  describe 'manual list creation' do
+    it 'should be possible with a mix of tasks and strings' do
+      l = Todo::List.new([
+        "A task!",
+        Todo::Task.new("Another task!"),
+      ])
+
+      l.length.should == 2
+    end
   end
 end
