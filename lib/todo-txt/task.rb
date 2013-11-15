@@ -175,7 +175,6 @@ module Todo
       @created_on
     end
 
-    # Not implemented
     def overdue?
       return true if !due_on.nil? && due_on < Date.today
       false
@@ -250,7 +249,7 @@ module Todo
     def toggle!
       done? ? undo! : do!
     end
-    
+
     # Returns this task as a string.
     #
     # Example:
@@ -267,7 +266,7 @@ module Todo
       due_on_string = due_on.nil? ? "" : " due:#{due_on}"
       "#{done_string}#{priority_string}#{created_on_string}#{text}#{contexts_string}#{projects_string}#{due_on_string}"
     end
-    
+
     # Compares the priorities of two tasks.
     #
     # Example:
