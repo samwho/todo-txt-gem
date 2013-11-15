@@ -107,5 +107,4 @@ Tasks without a priority will always be less than a task with a priority.
 
 # Requirements
 
-The todo-txt gem requires Ruby 1.9.2 or higher. It doesn't currently run on
-1.8.7.
+The todo-txt gem requires Ruby 1.8.7 or higher.
