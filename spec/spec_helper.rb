@@ -1,4 +1,4 @@
 require 'simplecov'
 SimpleCov.start
 
-require_relative '../lib/todo-txt'
+require File.join(File.dirname(__FILE__), "../lib/todo-txt.rb")
