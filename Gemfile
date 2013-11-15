@@ -5,3 +5,7 @@ group :test do
   gem 'rake'
   gem 'timecop'
 end
+
+group :development do
+  gem 'bundler'
+end
