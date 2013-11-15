@@ -51,7 +51,7 @@ list.by_context "@code"
 
 list.by_project "+manhatten"
 # => Returns a new Todo::List with only tasks that are part of the
-      +manhatten project (see what I did there?)
+#    +manhatten project (see what I did there?)
 
 # And you can combine these, like so
 list.by_project("+manhatten").by_priority("B")
