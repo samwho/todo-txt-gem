@@ -40,21 +40,12 @@ module Todo
       /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
     end
 
-    def get_completed_date
-      begin
-        return Date.parse(self.class.done_regex.match(@orig)[1])
-      rescue; end
-      nil
-    end
-
-    def get_due_on_date
-      begin
-        return Date.parse(self.class.due_on_regex.match(@orig)[1])
-      rescue; end
-      nil
-    end
-
-    # Creates a new task. The argument that you pass in must be a string.
+    # Creates a new task. The argument that you pass in must be the string
+    # representation of a task.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new("(A) A high priority task!")
     def initialize task
       @orig = task
       @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
@@ -175,6 +166,13 @@ module Todo
       @created_on
     end
 
+    # Returns whether a task's due date is in the past.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new("This task is overdue! due:#{Date.today - 1}")
+    #   task.overdue?
+    #   #=> true
     def overdue?
       return true if !due_on.nil? && due_on < Date.today
       false
@@ -306,6 +304,20 @@ module Todo
           date = @orig.match self.class.created_on_regex
           return Date.parse(date[1]) unless date.nil?
         end
+      rescue; end
+      nil
+    end
+
+    def get_completed_date
+      begin
+        return Date.parse(self.class.done_regex.match(@orig)[1])
+      rescue; end
+      nil
+    end
+
+    def get_due_on_date
+      begin
+        return Date.parse(self.class.due_on_regex.match(@orig)[1])
       rescue; end
       nil
     end
