@@ -4,7 +4,7 @@ group :test do
   gem 'rspec'
   gem 'rake'
   gem 'timecop'
-  gem 'simplecov', require: false
+  gem 'simplecov', :require => false
 end
 
 group :development do
