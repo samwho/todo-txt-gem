@@ -1,5 +1,6 @@
-# Require all files in the main lib directory
-Dir[File.dirname(__FILE__) + '/todo-txt/*.rb'].each do |file|
-  require file
-end
+require 'logger'
+
+require 'todo-txt/logger.rb'
+require 'todo-txt/list.rb'
+require 'todo-txt/task.rb'
 
