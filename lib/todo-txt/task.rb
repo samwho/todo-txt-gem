@@ -199,26 +199,30 @@ module Todo
     #   task.do!
     #   task.done?
     #   #=> true
-    #   task.date
+    #   task.created_on
+    #   #=> <Date: 2012-12-08 (4911981/2,0,2299161)>
+    #   task.completed_on
     #   #=> # the current date
     def do!
       @completed_on = Date.today
       @priority = nil
     end
 
-    # Marks the task as incomplete and resets its original due date.
+    # Marks the task as incomplete and resets its original priority.
     #
     # Example:
     #
-    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task = Todo::Task.new "x 2012-12-08 2012-03-04 Task."
     #   task.done?
     #   #=> true
     #
     #   task.undo!
     #   task.done?
     #   #=> false
-    #   task.date
-    #   #=> # <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #   task.created_on
+    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #   task.completed_on
+    #   #=> nil
     def undo!
       @completed_on = nil
       @priority = orig_priority
