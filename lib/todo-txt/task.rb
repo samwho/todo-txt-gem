@@ -7,12 +7,12 @@ module Todo
 
     # The regular expression used to match contexts.
     def self.contexts_regex
-       /(?:\s+|^)@\w+/
+       /(?:\s+|^)@[^\s]+/
     end
 
     # The regex used to match projects.
     def self.projects_regex
-       /(?:\s+|^)\+\w+/
+       /(?:\s+|^)\+[^\s]+/
     end
 
     # The regex used to match priorities.
