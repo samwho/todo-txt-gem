@@ -59,6 +59,22 @@ describe Todo::List do
     filtered.length.should be > 0
   end
 
+  it 'should be able to filter by done' do
+    list.by_done.each do |task|
+      task.text.should include 'This task is completed'
+    end
+
+    list.by_done.length.should be == 2    
+  end
+
+  it 'should be able to filter by not done' do
+    list.by_not_done.each do |task|
+      task.text.should_not include 'This task is completed'
+    end
+
+    list.by_not_done.length.should be == 9    
+  end
+
   it 'should be sortable' do
     list.sort.each_cons(2) do |task_a, task_b|
       task_a.should be <= task_b

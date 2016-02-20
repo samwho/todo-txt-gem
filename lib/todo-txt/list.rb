@@ -83,5 +83,26 @@ module Todo
     def by_project project
       Todo::List.new self.select { |task| task.projects.include? project }
     end
+
+    # Filters the list by completed tasks and returns a new list.
+    #
+    # Example:
+    #
+    #   list = Todo::List.new "/path/to/list"
+    #   list.by_done #=> Will be a new list with only tasks marked with
+    #                    an [x]
+    def by_done
+      Todo::List.new self.select { |task| task.done? }
+    end
+
+    # Filters the list by incomplete tasks and returns a new list.
+    #
+    # Example:
+    #
+    #   list = Todo::List.new "/path/to/list"
+    #   list.by_not_done #=> Will be a new list with only incomplete tasks
+    def by_not_done
+      Todo::List.new self.select { |task| task.done? == false }
+    end
   end
 end
