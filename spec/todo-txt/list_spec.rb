@@ -1,47 +1,47 @@
-require File.join(File.dirname(__FILE__), "../spec_helper.rb")
+require 'spec_helper'
 
 describe Todo::List do
   let(:path) { File.dirname(__FILE__) + '/../data/todo.txt' }
   let(:list) { Todo::List.new(path) }
 
   it 'should have the correct path' do
-    list.path.should == path
+    expect(list.path).to eq(path)
   end
 
   it 'should grab a list of Todo::Tasks' do
     list.each do |task|
-      task.class.should == Todo::Task
+      expect(task.class).to eq(Todo::Task)
     end
 
     # This is a little bit fragile but it helps me sleep at night.
-    list[0].priority.should == "A"
+    expect(list[0].priority).to eq("A")
   end
 
   it 'should be able to filter by priority' do
     list.by_priority("A").each do |task|
-      task.priority.should == "A"
+      expect(task.priority).to eq("A")
     end
 
     # Make sure some data was actually checked
-    list.by_priority("A").length.should be > 0
+    expect(list.by_priority("A").length).to be > 0
   end
 
   it 'should be able to filter by context' do
     list.by_context("@context").each do |task|
-      task.contexts.should include "@context"
+      expect(task.contexts).to include "@context"
     end
 
     # Make sure some data was actually checked
-    list.by_context("@context").length.should be > 0
+    expect(list.by_context("@context").length).to be > 0
   end
 
   it 'should be able to filter by project' do
     list.by_project("+project").each do |task|
-      task.projects.should include "+project"
+      expect(task.projects).to include "+project"
     end
 
     # Make sure some data was actually checked
-    list.by_project("+project").length.should be > 0
+    expect(list.by_project("+project").length).to be > 0
   end
 
   it 'should be able to filter by project, context and priority' do
@@ -50,38 +50,38 @@ describe Todo::List do
                     by_priority("C")
 
     filtered.each do |task|
-      task.projects.should include "+project"
-      task.contexts.should include "@context"
-      task.priority.should == "C"
+      expect(task.projects).to include "+project"
+      expect(task.contexts).to include "@context"
+      expect(task.priority).to eq("C")
     end
 
     # Make sure some data was actually checked
-    filtered.length.should be > 0
+    expect(filtered.length).to be > 0
   end
 
   it 'should be able to filter by done' do
     list.by_done.each do |task|
-      task.text.should include 'This task is completed'
+      expect(task.text).to include 'This task is completed'
     end
 
-    list.by_done.length.should be == 2    
+    expect(list.by_done.length).to eq(2)
   end
 
   it 'should be able to filter by not done' do
     list.by_not_done.each do |task|
-      task.text.should_not include 'This task is completed'
+      expect(task.text).not_to include 'This task is completed'
     end
 
-    list.by_not_done.length.should be == 9    
+    expect(list.by_not_done.length).to eq(9)
   end
 
   it 'should be sortable' do
     list.sort.each_cons(2) do |task_a, task_b|
-      task_a.should be <= task_b
+      expect(task_a).to be <= task_b
     end
 
     # Make sure some data was actually checked
-    list.sort.length.should be > 0
+    expect(list.sort.length).to be > 0
 
     # Class should still be Todo::List
     # This assertion currently fails. TODO.
@@ -95,7 +95,7 @@ describe Todo::List do
         Todo::Task.new("Another task!"),
       ])
 
-      l.length.should == 2
+      expect(l.length).to eq(2)
     end
   end
 end
