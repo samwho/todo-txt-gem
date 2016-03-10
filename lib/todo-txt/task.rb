@@ -4,36 +4,7 @@ module Todo
   class Task
     include Comparable
     include Todo::Logger
-
-    # The regular expression used to match contexts.
-    def self.contexts_regex
-       /(?:\s+|^)@[^\s]+/
-    end
-
-    # The regex used to match projects.
-    def self.projects_regex
-       /(?:\s+|^)\+[^\s]+/
-    end
-
-    # The regex used to match priorities.
-    def self.priority_regex
-      /(?:^|\s+)\(([A-Za-z])\)\s+/
-    end
-
-    # The regex used to match creation date.
-    def self.created_on_regex
-      /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
-    end
-
-    # The regex used to match completion.
-    def self.done_regex
-      /^x\s+(\d{4}-\d{2}-\d{2})\s+/
-    end
-
-    # The regex used to match due date.
-    def self.due_on_regex
-      /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
-    end
+    include Todo::Syntax
 
     # Creates a new task. The argument that you pass in must be the string
     # representation of a task.
@@ -46,8 +17,8 @@ module Todo
       @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
       @priority, @created_on = orig_priority, orig_created_on
       @due_on = get_due_on_date
-      @contexts ||= orig.scan(self.class.contexts_regex).map { |item| item.strip }
-      @projects ||= orig.scan(self.class.projects_regex).map { |item| item.strip }
+      @contexts ||= orig.scan(contexts_regex).map { |item| item.strip }
+      @projects ||= orig.scan(projects_regex).map { |item| item.strip }
     end
 
     # Returns the original content of the task.
@@ -133,12 +104,12 @@ module Todo
     #   task.text #=> "Testing!"
     def text
       @text ||= orig.
-        gsub(self.class.done_regex, '').
-        gsub(self.class.priority_regex, '').
-        gsub(self.class.created_on_regex, '').
-        gsub(self.class.contexts_regex, '').
-        gsub(self.class.projects_regex, '').
-        gsub(self.class.due_on_regex, '').
+        gsub(done_regex, '').
+        gsub(priority_regex, '').
+        gsub(created_on_regex, '').
+        gsub(contexts_regex, '').
+        gsub(projects_regex, '').
+        gsub(due_on_regex, '').
         strip
     end
 
@@ -294,13 +265,13 @@ module Todo
     private
 
     def orig_priority
-      @orig.match(self.class.priority_regex)[1] if @orig =~ self.class.priority_regex
+      @orig.match(priority_regex)[1] if @orig =~ priority_regex
     end
 
     def orig_created_on
       begin
-        if @orig =~ self.class.created_on_regex
-          date = @orig.match self.class.created_on_regex
+        if @orig =~ created_on_regex
+          date = @orig.match created_on_regex
           return Date.parse(date[1]) unless date.nil?
         end
       rescue; end
@@ -309,14 +280,14 @@ module Todo
 
     def get_completed_date
       begin
-        return Date.parse(self.class.done_regex.match(@orig)[1])
+        return Date.parse(done_regex.match(@orig)[1])
       rescue; end
       nil
     end
 
     def get_due_on_date
       begin
-        return Date.parse(self.class.due_on_regex.match(@orig)[1])
+        return Date.parse(due_on_regex.match(@orig)[1])
       rescue; end
       nil
     end
