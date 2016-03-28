@@ -14,11 +14,11 @@ module Todo
     #   task = Todo::Task.new("(A) A high priority task!")
     def initialize task
       @orig = task
-      @completed_on = get_completed_date #orig.scan(self.class.done_regex)[1] ||= nil
-      @priority, @created_on = orig_priority, orig_created_on
-      @due_on = get_due_on_date
-      @contexts ||= orig.scan(contexts_regex).map { |item| item.strip }
-      @projects ||= orig.scan(projects_regex).map { |item| item.strip }
+      @completed_on = get_completed_date(orig)
+      @priority, @created_on = orig_priority(orig), orig_created_on(orig)
+      @due_on = get_due_on_date(orig)
+      @contexts ||= get_context_tags(orig)
+      @projects ||= get_project_tags(orig)
     end
 
     # Returns the original content of the task.
@@ -195,7 +195,7 @@ module Todo
     #   #=> nil
     def undo!
       @completed_on = nil
-      @priority = orig_priority
+      @priority = orig_priority(orig)
     end
 
     # Toggles the task from complete to incomplete or vice versa.
@@ -260,36 +260,5 @@ module Todo
         other_task.priority <=> self.priority
       end
     end
-
-    private
-
-    def orig_priority
-      @orig.match(priority_regex)[1] if @orig =~ priority_regex
-    end
-
-    def orig_created_on
-      begin
-        if @orig =~ created_on_regex
-          date = @orig.match created_on_regex
-          return Date.parse(date[1]) unless date.nil?
-        end
-      rescue; end
-      nil
-    end
-
-    def get_completed_date
-      begin
-        return Date.parse(done_regex.match(@orig)[1])
-      rescue; end
-      nil
-    end
-
-    def get_due_on_date
-      begin
-        return Date.parse(due_on_regex.match(@orig)[1])
-      rescue; end
-      nil
-    end
-
   end
 end
