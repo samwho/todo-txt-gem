@@ -17,8 +17,8 @@ module Todo
       @completed_on = get_completed_date(orig)
       @priority, @created_on = orig_priority(orig), orig_created_on(orig)
       @due_on = get_due_on_date(orig)
-      @contexts ||= get_context_tags(orig)
-      @projects ||= get_project_tags(orig)
+      @contexts ||= extract_context_tags(orig)
+      @projects ||= extract_project_tags(orig)
     end
 
     # Returns the original content of the task.
