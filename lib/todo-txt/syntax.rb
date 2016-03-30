@@ -1,43 +1,42 @@
 module Todo
   module Syntax
     # The regular expression used to match contexts.
-    def contexts_regex
-       /(?:\s+|^)@[^\s]+/
-    end
+    CONTEXTS_PATTERN = /(?:\s+|^)@[^\s]+/.freeze
 
     # The regex used to match projects.
-    def projects_regex
-       /(?:\s+|^)\+[^\s]+/
-    end
+    PROJECTS_PATTERN = /(?:\s+|^)\+[^\s]+/.freeze
 
     # The regex used to match priorities.
-    def priority_regex
-      /(?:^|\s+)\(([A-Za-z])\)\s+/
-    end
+    PRIORITY_PATTERN = /(?:^|\s+)\(([A-Za-z])\)\s+/
 
     # The regex used to match creation date.
-    def created_on_regex
-      /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
-    end
+    CREATED_ON_PATTERN = /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/.freeze
 
     # The regex used to match completion.
-    def done_regex
-      /^x\s+(\d{4}-\d{2}-\d{2})\s+/
-    end
+    COMPLETED_ON_PATTERN = /^x\s+(\d{4}-\d{2}-\d{2})\s+/.freeze
 
     # The regex used to match due date.
-    def due_on_regex
-      /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
+    DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i.freeze
+
+    def get_item_text(line)
+      line.
+        gsub(COMPLETED_ON_PATTERN, '').
+        gsub(PRIORITY_PATTERN, '').
+        gsub(CREATED_ON_PATTERN, '').
+        gsub(CONTEXTS_PATTERN, '').
+        gsub(PROJECTS_PATTERN, '').
+        gsub(DUE_ON_PATTERN, '').
+        strip
     end
 
     def orig_priority(line)
-      line.match(priority_regex)[1] if line =~ priority_regex
+      line.match(PRIORITY_PATTERN)[1] if line =~ PRIORITY_PATTERN
     end
 
     def orig_created_on(line)
       begin
-        if line =~ created_on_regex
-          date = line.match created_on_regex
+        if line =~ CREATED_ON_PATTERN
+          date = line.match CREATED_ON_PATTERN
           return Date.parse(date[1]) unless date.nil?
         end
       rescue; end
@@ -46,24 +45,24 @@ module Todo
 
     def get_completed_date(line)
       begin
-        return Date.parse(done_regex.match(line)[1])
+        return Date.parse(COMPLETED_ON_PATTERN.match(line)[1])
       rescue; end
       nil
     end
 
     def get_due_on_date(line)
       begin
-        return Date.parse(due_on_regex.match(line)[1])
+        return Date.parse(DUE_ON_PATTERN.match(line)[1])
       rescue; end
       nil
     end
 
     def get_context_tags(line)
-      line.scan(contexts_regex).map { |tag| tag.strip }
+      line.scan(CONTEXTS_PATTERN).map { |tag| tag.strip }
     end
 
     def get_project_tags(line)
-      line.scan(projects_regex).map { |tag| tag.strip }
+      line.scan(PROJECTS_PATTERN).map { |tag| tag.strip }
     end
   end
 end

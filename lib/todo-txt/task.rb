@@ -103,14 +103,7 @@ module Todo
     #   task = Todo::Task.new "(A) @test Testing!"
     #   task.text #=> "Testing!"
     def text
-      @text ||= orig.
-        gsub(done_regex, '').
-        gsub(priority_regex, '').
-        gsub(created_on_regex, '').
-        gsub(contexts_regex, '').
-        gsub(projects_regex, '').
-        gsub(due_on_regex, '').
-        strip
+      @text ||= get_item_text(orig)
     end
 
     # Returns the task's creation date, if any.
