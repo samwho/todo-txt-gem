@@ -61,7 +61,7 @@ module Todo
     #
     # @param [String] line Line of text encoding a single task
     # @return [Array<String>] List of context tags
-    def extract_context_tags(line)
+    def extract_contexts(line)
       line.scan(CONTEXTS_PATTERN).map { |tag| tag.strip }
     end
 
@@ -69,7 +69,7 @@ module Todo
     #
     # @param [String] line Line of text encoding a single task
     # @return [Array<String>] List of project tags
-    def extract_project_tags(line)
+    def extract_projects(line)
       line.scan(PROJECTS_PATTERN).map { |tag| tag.strip }
     end
   end

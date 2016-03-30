@@ -5,37 +5,37 @@ describe Todo::Syntax do
 
   describe '#get_context_tags' do
     specify 'empty task' do
-      expect(get_context_tags('')).to eq([])
+      expect(extract_contexts('')).to eq([])
     end
 
     specify 'task without context' do
-      expect(get_context_tags('something to do')).to eq([])
+      expect(extract_contexts('something to do')).to eq([])
     end
 
     specify 'task with single context' do
-      expect(get_context_tags('something to do @work')).to eq(['@work'])
+      expect(extract_contexts('something to do @work')).to eq(['@work'])
     end
 
     specify 'task with multiple contexts' do
-      expect(get_context_tags('something to do @work @play')).to eq(['@work', '@play'])
+      expect(extract_contexts('something to do @work @play')).to eq(['@work', '@play'])
     end
   end
 
   describe '#get_project_tags' do
     specify 'empty task' do
-      expect(get_project_tags('')).to eq([])
+      expect(extract_projects('')).to eq([])
     end
 
     specify 'task without project' do
-      expect(get_project_tags('something to do')).to eq([])
+      expect(extract_projects('something to do')).to eq([])
     end
 
     specify 'task with single project' do
-      expect(get_project_tags('something to do +report')).to eq(['+report'])
+      expect(extract_projects('something to do +report')).to eq(['+report'])
     end
 
     specify 'task with multiple projects' do
-      expect(get_project_tags('something to do +report +analysis')).to eq(['+report', '+analysis'])
+      expect(extract_projects('something to do +report +analysis')).to eq(['+report', '+analysis'])
     end
   end
 
