@@ -1,7 +1,7 @@
 # Todo.txt
 
-[![Development Build Status](https://secure.travis-ci.org/samwho/todo-txt-gem.png?branch=develop)](http://travis-ci.org/samwho/todo-txt-gem)
-[![Master Build Status](https://secure.travis-ci.org/samwho/todo-txt-gem.png?branch=master)](http://travis-ci.org/samwho/todo-txt-gem)
+[![Gem Version](http://img.shields.io/gem/v/todo-txt.svg)](https://rubygems.org/gems/todo-txt)
+[![Build Status](https://travis-ci.org/samwho/todo-txt-gem.svg?branch=master)](https://travis-ci.org/samwho/todo-txt-gem)
 
 This is a Ruby client library for Gina Trapani's
 [todo.txt](https://github.com/ginatrapani/todo.txt-cli/). It allows for easy
