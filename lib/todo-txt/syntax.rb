@@ -33,28 +33,46 @@ module Todo
       line.match(PRIORITY_PATTERN)[1] if line =~ PRIORITY_PATTERN
     end
 
+    # Extracts the creation date for the given todo item.
+    # Returns nil if a valid date is not found.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [Date] the created date of the line
     def orig_created_on(line)
+      date = line.match CREATED_ON_PATTERN
       begin
-        if line =~ CREATED_ON_PATTERN
-          date = line.match CREATED_ON_PATTERN
-          return Date.parse(date[1]) unless date.nil?
-        end
-      rescue; end
-      nil
+        Date.parse(date[1]) if date
+      rescue ArgumentError
+        return nil # The given date is not valid
+      end
     end
 
+    # Extracts the completion date for the given todo item.
+    # Returns nil if a valid date is not found.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [Date] the completed date of the line
     def get_completed_date(line)
+      date = COMPLETED_ON_PATTERN.match(line)
       begin
-        return Date.parse(COMPLETED_ON_PATTERN.match(line)[1])
-      rescue; end
-      nil
+        Date.parse(date[1]) if date
+      rescue ArgumentError
+        return nil # The given date is not valid
+      end
     end
 
+    # Extracts the completion date for the given todo item.
+    # Returns nil if a valid date is not found.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [Date] the due date of the line
     def get_due_on_date(line)
+      date = DUE_ON_PATTERN.match(line)
       begin
-        return Date.parse(DUE_ON_PATTERN.match(line)[1])
-      rescue; end
-      nil
+        Date.parse(date[1]) if date
+      rescue ArgumentError
+        return nil # The given date is not valid
+      end
     end
 
     # Extract the list of `@context` tags out of the task line.
