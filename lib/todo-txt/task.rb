@@ -191,6 +191,26 @@ module Todo
       @priority = orig_priority(orig)
     end
 
+    # Increases the priority until A. If it's nil, it sets it to A.
+    # @return [Char] the new priority of the task
+    def priority_inc!
+      if @priority.nil?
+        @priority = 'A'
+      elsif @priority.ord > 65
+        @priority = (@priority.ord - 1).chr
+      end
+      @priority
+    end
+
+    # Decreases the priority until Z. if it's nil, it does nothing and
+    # returns nil.
+    # @return [Char] the new priority of the task
+    def priority_dec!
+      return if @priority.nil?
+      @priority = @priority.next if @priority.ord < 90
+      @priority
+    end
+
     # Toggles the task from complete to incomplete or vice versa.
     #
     # Example:

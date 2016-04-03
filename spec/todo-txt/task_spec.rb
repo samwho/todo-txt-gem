@@ -71,6 +71,78 @@ describe Todo::Task do
     end
   end
 
+  describe 'Step priority:' do
+    context 'Increment' do
+      it 'increments the priority by one' do
+        task = Todo::Task.new '(B) Task'
+        task.priority_inc!
+        expect(task.priority).to eq('A')
+      end
+
+      it 'returns the new priority' do
+        task = Todo::Task.new '(B) Task'
+        expect(task.priority_inc!).to eq('A')
+      end
+
+      it 'does not increment priority beyond A' do
+        task = Todo::Task.new '(A) Task'
+        task.priority_inc!
+        expect(task.priority).to eq('A')
+      end
+
+      it 'returns A if the priority did not change' do
+        task = Todo::Task.new '(A) Task'
+        expect(task.priority_inc!).to eq('A')
+      end
+
+      it 'sets a priority if previous priority was nil' do
+        task = Todo::Task.new 'Task'
+        task.priority_inc!
+        expect(task.priority).to eq('A')
+      end
+
+      it 'returns A if the previous priority was nil' do
+        task = Todo::Task.new 'Task'
+        expect(task.priority_inc!).to eq('A')
+      end
+    end
+
+    context 'Decrement' do
+      it 'lowers the priority by one' do
+        task = Todo::Task.new '(A) Task'
+        task.priority_dec!
+        expect(task.priority).to eq('B')
+      end
+
+      it 'returns the new priority' do
+        task = Todo::Task.new '(A) Task'
+        expect(task.priority_dec!).to eq('B')
+      end
+
+      it 'does not go below Z' do
+        task = Todo::Task.new '(Z) Task'
+        task.priority_dec!
+        expect(task.priority).to eq('Z')
+      end
+
+      it 'returns Z if priority did not change' do
+        task = Todo::Task.new '(Z) Task'
+        expect(task.priority_dec!).to eq('Z')
+      end
+
+      it 'does not set a priority if priority was nil' do
+        task = Todo::Task.new 'Task'
+        task.priority_dec!
+        expect(task.priority).to eq(nil)
+      end
+
+      it 'returns nil if priority was nil' do
+        task = Todo::Task.new 'Task'
+        expect(task.priority_dec!).to eq(nil)
+      end
+    end
+  end
+
   describe 'Completion:' do
     it 'should be not done with missing date' do
       task = Todo::Task.new 'x This is not done'
