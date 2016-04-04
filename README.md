@@ -5,10 +5,13 @@
 
 This is a Ruby client library for Gina Trapani's
 [todo.txt](https://github.com/ginatrapani/todo.txt-cli/). It allows for easy
-parsing of task lists and tasks in the todo.txt format.
+management of task lists and tasks in the todo.txt format.
 
 Find the project on GitHub:
 [http://github.com/samwho/todo-txt-gem](http://github.com/samwho/todo-txt-gem).
+
+Find the full API docs on Rubydoc.info:
+[http://www.rubydoc.info/gems/todo-txt](http://www.rubydoc.info/gems/todo-txt).
 
 # Installation
 
@@ -49,12 +52,12 @@ list.by_priority "A"
 list.by_context "@code"
 # => Returns a new Todo::List with only tasks that have a @code context.
 
-list.by_project "+manhatten"
+list.by_project "+manhattan"
 # => Returns a new Todo::List with only tasks that are part of the
-#    +manhatten project (see what I did there?)
+#    +manhattan project (see what I did there?)
 
 # And you can combine these, like so
-list.by_project("+manhatten").by_priority("B")
+list.by_project("+manhattan").by_priority("B")
 ```
 
 ## Todo::Task
@@ -107,4 +110,4 @@ Tasks without a priority will always be less than a task with a priority.
 
 # Requirements
 
-The todo-txt gem requires Ruby 1.8.7 or higher.
+The todo-txt gem requires Ruby 2.0 or higher.
