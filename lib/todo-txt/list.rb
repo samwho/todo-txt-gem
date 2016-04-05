@@ -1,5 +1,8 @@
 module Todo
-  class List < Array
+  class List
+    include Enumerable
+    extend Forwardable
+
     # Initializes a Todo List object with a path to the corresponding todo.txt
     # file. For example, if your todo.txt file is located at:
     #
@@ -21,6 +24,8 @@ module Todo
     #
     #   list = Todo::List.new array
     def initialize list
+      @collection = []
+
       if list.is_a? Array
         # No file path was given.
         @path = nil
@@ -29,10 +34,10 @@ module Todo
         list.each do |task|
           # If it's a string, make a new task out of it.
           if task.is_a? String
-            self.push Todo::Task.new task
+            @collection.push Todo::Task.new task
           # If it's a task, just add it.
           elsif task.is_a? Todo::Task
-            self.push task
+            @collection.push task
           end
         end
       elsif list.is_a? String
@@ -41,9 +46,15 @@ module Todo
         # Read in lines from file, create Todo::Tasks out of them and push them
         # onto self.
         File.open(list) do |file|
-          file.each_line { |line| self.push Todo::Task.new line }
+          file.each_line { |line| @collection.push Todo::Task.new line }
         end
       end
+    end
+
+    def_delegators :@collection, :[], :last, :length, :push, :pop
+
+    def each(&block)
+      @collection.each(&block)
     end
 
     # The path to the todo.txt file that you supplied when you created the
