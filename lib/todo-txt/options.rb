@@ -13,8 +13,6 @@ module Todo
   end
 
   class Options
-    # PENDING
-    #
     # Require all done tasks to have a `completed_on` date. True by default.
     #
     # - When `true`, tasks with invalid dates are considered not done.

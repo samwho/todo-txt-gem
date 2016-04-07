@@ -14,11 +14,18 @@ module Todo
     #   task = Todo::Task.new("(A) A high priority task!")
     def initialize task
       @orig = task
-      @completed_on = get_completed_date(orig)
       @priority, @created_on = orig_priority(orig), orig_created_on(orig)
       @due_on = get_due_on_date(orig)
       @contexts ||= extract_contexts(orig)
       @projects ||= extract_projects(orig)
+
+      if Todo.options.require_completed_on
+        @completed_on = extract_completed_date(orig)
+        @is_completed = !@completed_on.nil?
+      else
+        @completed_on = extract_completed_date(orig)
+        @is_completed = check_completed_flag(orig)
+      end
     end
 
     # Returns the original content of the task.
@@ -148,7 +155,7 @@ module Todo
     #   task.done?
     #   #=> false
     def done?
-      !@completed_on.nil?
+      @is_completed
     end
 
     # Completes the task on the current date.
@@ -168,6 +175,7 @@ module Todo
     #   #=> # the current date
     def do!
       @completed_on = Date.today
+      @is_completed = true
       @priority = nil
     end
 
@@ -188,6 +196,7 @@ module Todo
     #   #=> nil
     def undo!
       @completed_on = nil
+      @is_completed = false
       @priority = orig_priority(orig)
     end
 

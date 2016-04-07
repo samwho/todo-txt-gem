@@ -52,13 +52,27 @@ module Todo
     #
     # @param line [String] the todo item to be processed
     # @return [Date] the completed date of the line
-    def get_completed_date(line)
+    def extract_completed_date(line)
       date = COMPLETED_ON_PATTERN.match(line)
       begin
         Date.parse(date[1]) if date
       rescue ArgumentError
         return nil # The given date is not valid
       end
+    end
+
+    COMPLETED_FLAG = 'x'.freeze
+    SINGLE_SPACE = ' '.freeze
+
+    # Checks whether the given todo item has a completion flag set.
+    #
+    # This provides support for ad-hoc handwritten lists where the completed flag
+    # is set but there is no completed date.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [Boolean]
+    def check_completed_flag(line)
+      line[0] == COMPLETED_FLAG && line[1] == SINGLE_SPACE
     end
 
     # Extracts the completion date for the given todo item.

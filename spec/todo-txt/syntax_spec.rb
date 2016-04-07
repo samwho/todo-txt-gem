@@ -79,21 +79,39 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#get_completed_date' do
+  describe '#extract_completed_date' do
     specify 'empty task' do
-      expect(get_completed_date('')).to be nil
+      expect(extract_completed_date('')).to be nil
     end
 
     specify 'uncompleted task' do
-      expect(get_completed_date('2016-03-29 something to do')).to be nil
+      expect(extract_completed_date('2016-03-29 something to do')).to be nil
     end
 
     specify 'completed task without date' do
-      expect(get_completed_date('2016-03-29 something to do')).to be nil
+      expect(extract_completed_date('2016-03-29 something to do')).to be nil
     end
 
     specify 'completed task without date' do
-      expect(get_completed_date('2016-03-29 something to do')).to be nil
+      expect(extract_completed_date('2016-03-29 something to do')).to be nil
+    end
+  end
+
+  describe '#check_completed_flag' do
+    specify 'empty task' do
+      expect(check_completed_flag('')).to be false
+    end
+
+    specify 'uncompleted task' do
+      expect(check_completed_flag('2016-03-29 something to do')).to be false
+    end
+
+    specify 'completed task without date' do
+      expect(check_completed_flag('x something to do')).to be true
+    end
+
+    specify 'completed task with date' do
+      expect(check_completed_flag('x 2016-03-29 something to do')).to be true
     end
   end
 
