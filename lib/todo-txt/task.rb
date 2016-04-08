@@ -14,7 +14,8 @@ module Todo
     #   task = Todo::Task.new("(A) A high priority task!")
     def initialize task
       @orig = task
-      @priority, @created_on = orig_priority(orig), orig_created_on(orig)
+      @priority = extract_priority(orig)
+      @created_on = extract_created_on(orig)
       @due_on = get_due_on_date(orig)
       @contexts ||= extract_contexts(orig)
       @projects ||= extract_projects(orig)
@@ -197,7 +198,7 @@ module Todo
     def undo!
       @completed_on = nil
       @is_completed = false
-      @priority = orig_priority(orig)
+      @priority = extract_priority(orig)
     end
 
     # Increases the priority until A. If it's nil, it sets it to A.

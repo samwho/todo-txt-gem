@@ -39,43 +39,43 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#orig_priority' do
+  describe '#extract_priority' do
     specify 'empty task' do
-      expect(orig_priority('')).to be nil
+      expect(extract_priority('')).to be nil
     end
 
     specify 'task without priority' do
-      expect(orig_priority('something to do')).to be nil
+      expect(extract_priority('something to do')).to be nil
     end
 
     specify 'task with priority A' do
-      expect(orig_priority('(A) something to do')).to eq('A')
+      expect(extract_priority('(A) something to do')).to eq('A')
     end
 
     specify 'task with priority B' do
-      expect(orig_priority('(B) something to do')).to eq('B')
+      expect(extract_priority('(B) something to do')).to eq('B')
     end
   end
 
-  describe '#orig_created_on' do
+  describe '#extract_created_on' do
     specify 'empty task' do
-      expect(orig_created_on('')).to be nil
+      expect(extract_created_on('')).to be nil
     end
 
     specify 'task without date' do
-      expect(orig_created_on('something to do')).to be nil
+      expect(extract_created_on('something to do')).to be nil
     end
 
     specify 'task with created date' do
-      expect(orig_created_on('2016-03-29 something to do')).to eq(Date.new(2016, 03, 29))
+      expect(extract_created_on('2016-03-29 something to do')).to eq(Date.new(2016, 03, 29))
     end
 
     specify 'prioritised task with created date' do
-      expect(orig_created_on('(A) 2016-03-29 something to do')).to eq(Date.new(2016, 03, 29))
+      expect(extract_created_on('(A) 2016-03-29 something to do')).to eq(Date.new(2016, 03, 29))
     end
 
     specify 'date included in task text' do
-      expect(orig_created_on('(A) something to do on 2016-03-29')).to be nil
+      expect(extract_created_on('(A) something to do on 2016-03-29')).to be nil
     end
   end
 

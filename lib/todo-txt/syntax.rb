@@ -29,7 +29,7 @@ module Todo
         strip
     end
 
-    def orig_priority(line)
+    def extract_priority(line)
       line.match(PRIORITY_PATTERN)[1] if line =~ PRIORITY_PATTERN
     end
 
@@ -38,7 +38,7 @@ module Todo
     #
     # @param line [String] the todo item to be processed
     # @return [Date] the created date of the line
-    def orig_created_on(line)
+    def extract_created_on(line)
       date = line.match CREATED_ON_PATTERN
       begin
         Date.parse(date[1]) if date
