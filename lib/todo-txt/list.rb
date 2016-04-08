@@ -104,5 +104,10 @@ module Todo
     def by_not_done
       Todo::List.new self.select { |task| task.done? == false }
     end
+
+    # saves the list to the original file location.
+    def save!
+      File.open(@original_filename, 'w') { |file| file << @list.join("\n") }
+    end
   end
 end
