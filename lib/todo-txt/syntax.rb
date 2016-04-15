@@ -80,7 +80,7 @@ module Todo
     #
     # @param line [String] the todo item to be processed
     # @return [Date] the due date of the line
-    def get_due_on_date(line)
+    def extract_due_on_date(line)
       date = DUE_ON_PATTERN.match(line)
       begin
         Date.parse(date[1]) if date

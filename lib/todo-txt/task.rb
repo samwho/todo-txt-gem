@@ -16,7 +16,7 @@ module Todo
       @orig = task
       @priority = extract_priority(orig)
       @created_on = extract_created_on(orig)
-      @due_on = get_due_on_date(orig)
+      @due_on = extract_due_on_date(orig)
       @contexts ||= extract_contexts(orig)
       @projects ||= extract_projects(orig)
 

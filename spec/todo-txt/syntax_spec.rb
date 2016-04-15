@@ -115,17 +115,17 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#get_due_on_date' do
+  describe '#extract_due_on_date' do
     specify 'empty task' do
-      expect(get_due_on_date('')).to be nil
+      expect(extract_due_on_date('')).to be nil
     end
 
     specify 'task without due date' do
-      expect(get_due_on_date('something to do')).to be nil
+      expect(extract_due_on_date('something to do')).to be nil
     end
 
     specify 'task with due date' do
-      expect(get_due_on_date('something to do due:2016-03-30')).to eq(Date.new(2016, 03, 30))
+      expect(extract_due_on_date('something to do due:2016-03-30')).to eq(Date.new(2016, 03, 30))
     end
   end
 
