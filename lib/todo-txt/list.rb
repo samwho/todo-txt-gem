@@ -1,25 +1,25 @@
 module Todo
+  # Initializes a Todo List object with a path to the corresponding todo.txt
+  # file. For example, if your todo.txt file is located at:
+  #
+  #   /home/sam/Dropbox/todo/todo.txt
+  #
+  # You would initialize this object like:
+  #
+  #   list = Todo::List.new "/home/sam/Dropbox/todo/todo-txt"
+  #
+  # Alternately, you can initialize this object with an array of strings or
+  # tasks. If the array is of strings, the strings will be converted into
+  # tasks. You can supply a mixed list of string and tasks if you wish.
+  #
+  # Example:
+  #
+  #   array = Array.new
+  #   array.push "(A) A string task!"
+  #   array.push Todo::Task.new("(A) An actual task!")
+  #
+  #   list = Todo::List.new array
   class List < Array
-    # Initializes a Todo List object with a path to the corresponding todo.txt
-    # file. For example, if your todo.txt file is located at:
-    #
-    #   /home/sam/Dropbox/todo/todo.txt
-    #
-    # You would initialize this object like:
-    #
-    #   list = Todo::List.new "/home/sam/Dropbox/todo/todo-txt"
-    #
-    # Alternately, you can initialize this object with an array of strings or
-    # tasks. If the array is of strings, the strings will be converted into
-    # tasks. You can supply a mixed list of string and tasks if you wish.
-    #
-    # Example:
-    #
-    #   array = Array.new
-    #   array.push "(A) A string task!"
-    #   array.push Todo::Task.new("(A) An actual task!")
-    #
-    #   list = Todo::List.new array
     def initialize(list)
       if list.is_a? Array
         # No file path was given.
