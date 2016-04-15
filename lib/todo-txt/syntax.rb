@@ -1,6 +1,6 @@
 module Todo
   module Syntax
-    # The regular expression used to match contexts.
+    # The regex used to match contexts.
     CONTEXTS_PATTERN = /(?:\s+|^)@[^\s]+/
 
     # The regex used to match projects.
@@ -18,6 +18,12 @@ module Todo
     # The regex used to match due date.
     DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
 
+    # Extracts the readable text content of a task line, stripping out all the
+    # discrete pieces of metadata (priority, dates, completion flag, projects,
+    # contexts, etc).
+    #
+    # @param line [String] the todo item to be processed
+    # @return [String] the text content of the item
     def extract_item_text(line)
       line.
         gsub(COMPLETED_ON_PATTERN, '').
@@ -29,6 +35,10 @@ module Todo
         strip
     end
 
+    # Extracts the priority indicator from the task line.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [String] the character (from A-Z) representing the priority
     def extract_priority(line)
       line.match(PRIORITY_PATTERN)[1] if line =~ PRIORITY_PATTERN
     end
