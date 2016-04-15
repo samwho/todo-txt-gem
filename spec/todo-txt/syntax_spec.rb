@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Todo::Syntax do
   include Todo::Syntax
 
-  describe '#get_context_tags' do
+  describe '#extract_contexts' do
     specify 'empty task' do
       expect(extract_contexts('')).to eq([])
     end
@@ -21,7 +21,7 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#get_project_tags' do
+  describe '#extract_projects' do
     specify 'empty task' do
       expect(extract_projects('')).to eq([])
     end
