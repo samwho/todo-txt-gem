@@ -48,9 +48,7 @@ module Todo
 
     # The path to the todo.txt file that you supplied when you created the
     # Todo::List object.
-    def path
-      @path
-    end
+    attr_reader :path
 
     # Filters the list by priority and returns a new list.
     #
