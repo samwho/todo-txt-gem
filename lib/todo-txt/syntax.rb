@@ -18,7 +18,7 @@ module Todo
     # The regex used to match due date.
     DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i.freeze
 
-    def get_item_text(line)
+    def extract_item_text(line)
       line.
         gsub(COMPLETED_ON_PATTERN, '').
         gsub(PRIORITY_PATTERN, '').

@@ -111,7 +111,7 @@ module Todo
     #   task = Todo::Task.new "(A) @test Testing!"
     #   task.text #=> "Testing!"
     def text
-      @text ||= get_item_text(orig)
+      @text ||= extract_item_text(orig)
     end
 
     # Returns the task's creation date, if any.

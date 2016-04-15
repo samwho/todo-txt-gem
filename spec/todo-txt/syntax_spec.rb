@@ -129,21 +129,21 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#get_item_text' do
+  describe '#extract_item_text' do
     specify 'empty task' do
-      expect(get_item_text('')).to eq('')
+      expect(extract_item_text('')).to eq('')
     end
 
     specify 'task without markup' do
-      expect(get_item_text('something to do')).to eq('something to do')
+      expect(extract_item_text('something to do')).to eq('something to do')
     end
 
     specify 'task with date, priority, projects and context' do
-      expect(get_item_text('(A) 2016-03-29 something to do +experiment @work')).to eq('something to do')
+      expect(extract_item_text('(A) 2016-03-29 something to do +experiment @work')).to eq('something to do')
     end
 
     specify 'completed task with projects and context' do
-      expect(get_item_text('x 2016-03-30 2016-03-29 something to do +experiment @work')).to eq('something to do')
+      expect(extract_item_text('x 2016-03-30 2016-03-29 something to do +experiment @work')).to eq('something to do')
     end
   end
 end
