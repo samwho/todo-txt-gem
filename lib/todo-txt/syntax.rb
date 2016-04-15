@@ -1,22 +1,22 @@
 module Todo
   module Syntax
     # The regular expression used to match contexts.
-    CONTEXTS_PATTERN = /(?:\s+|^)@[^\s]+/.freeze
+    CONTEXTS_PATTERN = /(?:\s+|^)@[^\s]+/
 
     # The regex used to match projects.
-    PROJECTS_PATTERN = /(?:\s+|^)\+[^\s]+/.freeze
+    PROJECTS_PATTERN = /(?:\s+|^)\+[^\s]+/
 
     # The regex used to match priorities.
     PRIORITY_PATTERN = /(?:^|\s+)\(([A-Za-z])\)\s+/
 
     # The regex used to match creation date.
-    CREATED_ON_PATTERN = /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/.freeze
+    CREATED_ON_PATTERN = /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
 
     # The regex used to match completion.
-    COMPLETED_ON_PATTERN = /^x\s+(\d{4}-\d{2}-\d{2})\s+/.freeze
+    COMPLETED_ON_PATTERN = /^x\s+(\d{4}-\d{2}-\d{2})\s+/
 
     # The regex used to match due date.
-    DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i.freeze
+    DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
 
     def extract_item_text(line)
       line.
