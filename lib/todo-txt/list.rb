@@ -20,7 +20,7 @@ module Todo
     #   array.push Todo::Task.new("(A) An actual task!")
     #
     #   list = Todo::List.new array
-    def initialize list
+    def initialize(list)
       if list.is_a? Array
         # No file path was given.
         @path = nil
@@ -58,7 +58,7 @@ module Todo
     #
     #   list = Todo::List.new "/path/to/list"
     #   list.by_priority "A" #=> Will be a new list with only priority A tasks
-    def by_priority priority
+    def by_priority(priority)
       Todo::List.new self.select { |task| task.priority == priority }
     end
 
@@ -69,7 +69,7 @@ module Todo
     #   list = Todo::List.new "/path/to/list"
     #   list.by_context "@context" #=> Will be a new list with only tasks
     #                                  containing "@context"
-    def by_context context
+    def by_context(context)
       Todo::List.new self.select { |task| task.contexts.include? context }
     end
 
@@ -80,7 +80,7 @@ module Todo
     #   list = Todo::List.new "/path/to/list"
     #   list.by_project "+project" #=> Will be a new list with only tasks
     #                                  containing "+project"
-    def by_project project
+    def by_project(project)
       Todo::List.new self.select { |task| task.projects.include? project }
     end
 
