@@ -1,17 +1,17 @@
 require 'date'
 
 module Todo
+  # Creates a new task. The argument that you pass in must be the string
+  # representation of a task.
+  #
+  # Example:
+  #
+  #   task = Todo::Task.new("(A) A high priority task!")
   class Task
     include Comparable
     include Todo::Logger
     include Todo::Syntax
 
-    # Creates a new task. The argument that you pass in must be the string
-    # representation of a task.
-    #
-    # Example:
-    #
-    #   task = Todo::Task.new("(A) A high priority task!")
     def initialize task
       @orig = task
       @priority = extract_priority(orig)
