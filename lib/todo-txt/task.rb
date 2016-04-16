@@ -272,15 +272,15 @@ module Todo
     #
     #   task2 > task1
     #   # => false
-    def <=>(other_task)
-      if self.priority.nil? and other_task.priority.nil?
+    def <=>(other)
+      if priority.nil? && other.priority.nil?
         0
-      elsif other_task.priority.nil?
+      elsif other.priority.nil?
         1
-      elsif self.priority.nil?
+      elsif priority.nil?
         -1
       else
-        other_task.priority <=> self.priority
+        other.priority <=> priority
       end
     end
   end
