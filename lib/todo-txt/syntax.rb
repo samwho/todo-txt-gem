@@ -25,14 +25,13 @@ module Todo
     # @param line [String] the todo item to be processed
     # @return [String] the text content of the item
     def extract_item_text(line)
-      line.
-        gsub(COMPLETED_ON_PATTERN, '').
-        gsub(PRIORITY_PATTERN, '').
-        gsub(CREATED_ON_PATTERN, '').
-        gsub(CONTEXTS_PATTERN, '').
-        gsub(PROJECTS_PATTERN, '').
-        gsub(DUE_ON_PATTERN, '').
-        strip
+      line.gsub(COMPLETED_ON_PATTERN, '')
+          .gsub(PRIORITY_PATTERN, '')
+          .gsub(CREATED_ON_PATTERN, '')
+          .gsub(CONTEXTS_PATTERN, '')
+          .gsub(PROJECTS_PATTERN, '')
+          .gsub(DUE_ON_PATTERN, '')
+          .strip
     end
 
     # Extracts the priority indicator from the task line.
