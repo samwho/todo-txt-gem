@@ -12,7 +12,7 @@ module Todo
     include Todo::Logger
     include Todo::Syntax
 
-    def initialize task
+    def initialize(task)
       @orig = task
       @priority = extract_priority(orig)
       @created_on = extract_created_on(orig)
@@ -272,7 +272,7 @@ module Todo
     #
     #   task2 > task1
     #   # => false
-    def <=> other_task
+    def <=>(other_task)
       if self.priority.nil? and other_task.priority.nil?
         0
       elsif other_task.priority.nil?
