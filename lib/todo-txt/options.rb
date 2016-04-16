@@ -12,6 +12,7 @@ module Todo
     yield(options_instance)
   end
 
+  # Options for default preferences and library settings that can be overriden.
   class Options
     # Require all done tasks to have a `completed_on` date. True by default.
     #
