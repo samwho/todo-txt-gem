@@ -90,7 +90,7 @@ module Todo
     #   list.by_done #=> Will be a new list with only tasks marked with
     #                    an [x]
     def by_done
-      Todo::List.new(select { |task| task.done? })
+      Todo::List.new(select(&:done?))
     end
 
     # Filters the list by incomplete tasks and returns a new list.
