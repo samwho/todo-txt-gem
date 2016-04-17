@@ -29,7 +29,7 @@ module Todo
         list.each do |task|
           # If it's a string, make a new task out of it.
           if task.is_a? String
-            push Todo::Task.new task
+            push Task.new task
           # If it's a task, just add it.
           elsif task.is_a? Todo::Task
             push task
@@ -41,7 +41,7 @@ module Todo
         # Read in lines from file, create Todo::Tasks out of them and push them
         # onto self.
         File.open(list) do |file|
-          file.each_line { |line| push Todo::Task.new(line) }
+          file.each_line { |line| push Task.new(line) }
         end
       end
     end
@@ -57,7 +57,7 @@ module Todo
     #   list = Todo::List.new "/path/to/list"
     #   list.by_priority "A" #=> Will be a new list with only priority A tasks
     def by_priority(priority)
-      Todo::List.new(select { |task| task.priority == priority })
+      List.new(select { |task| task.priority == priority })
     end
 
     # Filters the list by context and returns a new list.
@@ -68,7 +68,7 @@ module Todo
     #   list.by_context "@context" #=> Will be a new list with only tasks
     #                                  containing "@context"
     def by_context(context)
-      Todo::List.new(select { |task| task.contexts.include? context })
+      List.new(select { |task| task.contexts.include? context })
     end
 
     # Filters the list by project and returns a new list.
@@ -79,7 +79,7 @@ module Todo
     #   list.by_project "+project" #=> Will be a new list with only tasks
     #                                  containing "+project"
     def by_project(project)
-      Todo::List.new(select { |task| task.projects.include? project })
+      List.new(select { |task| task.projects.include? project })
     end
 
     # Filters the list by completed tasks and returns a new list.
@@ -90,7 +90,7 @@ module Todo
     #   list.by_done #=> Will be a new list with only tasks marked with
     #                    an [x]
     def by_done
-      Todo::List.new(select(&:done?))
+      List.new(select(&:done?))
     end
 
     # Filters the list by incomplete tasks and returns a new list.
@@ -100,7 +100,7 @@ module Todo
     #   list = Todo::List.new "/path/to/list"
     #   list.by_not_done #=> Will be a new list with only incomplete tasks
     def by_not_done
-      Todo::List.new(select { |task| task.done? == false })
+      List.new(select { |task| task.done? == false })
     end
 
     # saves the list to the original file location.
