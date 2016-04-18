@@ -289,6 +289,23 @@ describe Todo::Task do
         expect(task.completed_on).to eq(Date.parse('8th December 2013'))
       end
     end
+
+    context 'Options#require_completed_on' do
+      before do
+        Todo.customize do |options|
+          options.require_completed_on = false
+        end
+      end
+
+      it 'should allow completion without date when option is set' do
+        task = Todo::Task.new('x This is done!')
+        expect(task.done?).to be true
+      end
+
+      after do
+        Todo.options.reset
+      end
+    end
   end
 
   describe 'Due dates:' do
