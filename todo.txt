@@ -1,0 +1,11 @@
+modify list#save! to work with windows line separators +bug
+determine correct/expected behaviour for missing file paths +feature +api
+dirty flag on lists that have modifications after loading +feature
+extract file handling into separate IO-like module +refactor +api
+implement enumerable API on list rather than inherit from array +api
+list operations should be algebraically closed +api
+include rubocop in travis builds +build
+use << operation to move tasks between lists +api +feature
+create github issue with roadmap for 1.0 release +feature +api
+consider rewriting file write tests with mocking and stringio +refactor +build
+remove deprecated date method from task +api
