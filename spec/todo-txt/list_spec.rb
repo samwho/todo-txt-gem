@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Todo::List do
   let(:path) { File.dirname(__FILE__) + '/../data/todo.txt' }
+  let(:mutable_path) { File.dirname(__FILE__) + '/../data/tasks.txt' }
   let(:list) { Todo::List.new(path) }
 
   context 'create with an array' do
@@ -17,6 +18,22 @@ describe Todo::List do
       array.push "(A) A string task!"
       array.push Todo::Task.new("(A) An actual task!")
       expect(Todo::List.new(array).path).to eq(nil)
+    end
+  end
+
+  context 'create and save from file' do
+    it 'successfully writes back changes' do
+      backup = Todo::List.new(mutable_path)
+
+      tasks = Todo::List.new(mutable_path)
+      tasks.each(&:do!)
+      tasks.save!
+
+      result = Todo::List.new(mutable_path)
+
+      expect(result.by_done.count).to eq(3)
+
+      backup.save!
     end
   end
 

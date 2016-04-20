@@ -103,9 +103,20 @@ module Todo
       List.new(select { |task| task.done? == false })
     end
 
-    # saves the list to the original file location.
+    # Saves the list to the original file location.
+    #
+    # Warning: This is a destructive operation and will overwrite what is
+    # currently there.
+    #
+    # If no `path` is specified in the constructor then an error is raised.
     def save!
-      File.open(@original_filename, 'w') { |file| file << @list.join("\n") }
+      raise "No path specified." unless path
+
+      File.open(path, 'w') do |outfile|
+        each do |task|
+          outfile.puts(task.to_s)
+        end
+      end
     end
   end
 end
