@@ -1,4 +1,4 @@
-modify list#save! to work with windows line separators +bug
+x 2016-04-21 modify list#save! to work with windows line separators +bug
 determine correct/expected behaviour for missing file paths +feature +api
 dirty flag on lists that have modifications after loading +feature
 extract file handling into separate IO-like module +refactor +api
