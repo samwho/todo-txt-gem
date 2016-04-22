@@ -12,30 +12,30 @@ module Todo
     include Todo::Logger
     include Todo::Syntax
 
-    def initialize(task)
-      @orig = task
-      @priority = extract_priority(orig)
-      @created_on = extract_created_on(orig)
-      @due_on = extract_due_on_date(orig)
-      @contexts ||= extract_contexts(orig)
-      @projects ||= extract_projects(orig)
+    def initialize(line)
+      @raw = line
+      @priority = extract_priority(raw)
+      @created_on = extract_created_on(raw)
+      @due_on = extract_due_on_date(raw)
+      @contexts ||= extract_contexts(raw)
+      @projects ||= extract_projects(raw)
 
       if Todo.options.require_completed_on
-        @completed_on = extract_completed_date(orig)
+        @completed_on = extract_completed_date(raw)
         @is_completed = !@completed_on.nil?
       else
-        @completed_on = extract_completed_date(orig)
-        @is_completed = check_completed_flag(orig)
+        @completed_on = extract_completed_date(raw)
+        @is_completed = check_completed_flag(raw)
       end
     end
 
-    # Returns the original content of the task.
+    # Returns the raw content of the original task line.
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) @context +project Hello!"
-    #   task.orig #=> "(A) @context +project Hello!"
-    attr_reader :orig
+    #   task = Todo::Task.new("(A) @context +project Hello!")
+    #   task.raw #=> "(A) @context +project Hello!"
+    attr_reader :raw
 
     # Returns the task's creation date, if any.
     #
@@ -111,7 +111,7 @@ module Todo
     #   task = Todo::Task.new "(A) @test Testing!"
     #   task.text #=> "Testing!"
     def text
-      @text ||= extract_item_text(orig)
+      @text ||= extract_item_text(raw)
     end
 
     # Returns the task's creation date, if any.
@@ -128,9 +128,18 @@ module Todo
     #
     # Deprecated
     def date
-      logger.warn("Task#date is deprecated, use created_on instead.")
+      logger.warn("`Task#date` is deprecated, use `Task#created_on` instead.")
 
       @created_on
+    end
+
+    # Returns the raw content of the original task line.
+    #
+    # Deprecated
+    def orig
+      logger.warn("`Task#orig` is deprecated, use `Task#raw` instead.")
+
+      raw
     end
 
     # Returns whether a task's due date is in the past.
@@ -198,7 +207,7 @@ module Todo
     def undo!
       @completed_on = nil
       @is_completed = false
-      @priority = extract_priority(orig)
+      @priority = extract_priority(raw)
     end
 
     # Increases the priority until A. If it's nil, it sets it to A.

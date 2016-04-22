@@ -11,7 +11,7 @@ describe Todo::Task do
       task = Todo::Task.new '(A) 2012-12-08 My task @test +test2'
       Timecop.freeze(2013, 12, 8) do
         task.do!
-        expect(task.orig).to eq('(A) 2012-12-08 My task @test +test2')
+        expect(task.raw).to eq('(A) 2012-12-08 My task @test +test2')
       end
     end
 
@@ -32,7 +32,7 @@ describe Todo::Task do
 
     it 'should retain the original task creation string' do
       task = Todo::Task.new '(A) This is an awesome task, yo. +winning'
-      expect(task.orig).to eq('(A) This is an awesome task, yo. +winning')
+      expect(task.raw).to eq('(A) This is an awesome task, yo. +winning')
     end
 
     it 'should be able to get just the text, no contexts etc.' do
@@ -411,11 +411,22 @@ describe Todo::Task do
       logger = double(Logger)
       Todo::Logger.logger = logger
 
-      task = Todo::Task.new 'x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-02-31 +project'
-      error_message = 'Task#date is deprecated, use created_on instead.'
+      task = Todo::Task.new('x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-02-31 +project')
+      error_message = '`Task#date` is deprecated, use `Task#created_on` instead.'
 
       expect(logger).to receive(:warn).with(error_message)
       task.date
+    end
+
+    it 'should call @logger.warn if #orig called as deprecated method' do
+      logger = double(Logger)
+      Todo::Logger.logger = logger
+
+      task = Todo::Task.new('x 2012-09-11 (B) 2012-03-04 This is a sweet task. @context due:2012-02-31 +project')
+      error_message = '`Task#orig` is deprecated, use `Task#raw` instead.'
+
+      expect(logger).to receive(:warn).with(error_message)
+      task.orig
     end
   end
 end
