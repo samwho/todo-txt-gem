@@ -144,7 +144,7 @@ module Todo
       !due_on.nil? && due_on < Date.today
     end
 
-    # Returns if the task is done.
+    # Returns true if the task is completed.
     #
     # Example:
     #
@@ -248,13 +248,15 @@ module Todo
     #   task.to_s
     #   #=> "(A) 2012-12-08 Task"
     def to_s
-      priority_string = priority ? "(#{priority}) " : ""
-      done_string = done? ? "x #{completed_on} " : ""
-      created_on_string = created_on ? "#{created_on} " : ""
-      contexts_string = contexts.empty? ? "" : " #{contexts.join ' '}"
-      projects_string = projects.empty? ? "" : " #{projects.join ' '}"
-      due_on_string = due_on.nil? ? "" : " due:#{due_on}"
-      "#{done_string}#{priority_string}#{created_on_string}#{text}#{contexts_string}#{projects_string}#{due_on_string}"
+      [
+        done? && "x #{completed_on}",
+        priority && "(#{priority})",
+        created_on.to_s,
+        text,
+        contexts.join(' '),
+        projects.join(' '),
+        due_on && "due:#{due_on}"
+      ].grep(String).join(' ').strip
     end
 
     # Compares the priorities of two tasks.
