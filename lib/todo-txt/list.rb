@@ -4,21 +4,21 @@ module Todo
   #
   #   /home/sam/Dropbox/todo/todo.txt
   #
-  # You would initialize this object like:
+  # You would initialize the list object like:
   #
-  #   list = Todo::List.new "/home/sam/Dropbox/todo/todo-txt"
+  #   list = Todo::List.new("/home/sam/Dropbox/todo/todo.txt")
   #
-  # Alternately, you can initialize this object with an array of strings or
+  # Alternately, you can initialize the object with an array of strings or
   # tasks. If the array is of strings, the strings will be converted into
   # tasks. You can supply a mixed list of string and tasks if you wish.
   #
   # Example:
   #
-  #   array = Array.new
-  #   array.push "(A) A string task!"
-  #   array.push Todo::Task.new("(A) An actual task!")
+  #   tasks = []
+  #   tasks << "A task line"
+  #   tasks << Todo::Task.new("A task object")
   #
-  #   list = Todo::List.new array
+  #   list = Todo::List.new(tasks)
   class List < Array
     def initialize(list)
       if list.is_a? Array
@@ -54,8 +54,12 @@ module Todo
     #
     # Example:
     #
-    #   list = Todo::List.new "/path/to/list"
-    #   list.by_priority "A" #=> Will be a new list with only priority A tasks
+    #   list = Todo::List.new("/path/to/list")
+    #   list.by_priority("A")
+    #   # => Will be a new list with only priority 'A' tasks
+    #
+    # @param priority [String]
+    # @return [Todo::List]
     def by_priority(priority)
       List.new(select { |task| task.priority == priority })
     end
@@ -64,9 +68,12 @@ module Todo
     #
     # Example:
     #
-    #   list = Todo::List.new "/path/to/list"
-    #   list.by_context "@context" #=> Will be a new list with only tasks
-    #                                  containing "@context"
+    #   list = Todo::List.new("/path/to/list")
+    #   list.by_context("@admin")
+    #   # => <Todo::List> filtered by '@admin'
+    #
+    # @param context [String]
+    # @return [Todo::List]
     def by_context(context)
       List.new(select { |task| task.contexts.include? context })
     end
@@ -75,9 +82,12 @@ module Todo
     #
     # Example:
     #
-    #   list = Todo::List.new "/path/to/list"
-    #   list.by_project "+project" #=> Will be a new list with only tasks
-    #                                  containing "+project"
+    #   list = Todo::List.new("/path/to/list")
+    #   list.by_project("+blog")
+    #   # => <Todo::List> filtered by '+blog'
+    #
+    # @param project [String]
+    # @return [Todo::List]
     def by_project(project)
       List.new(select { |task| task.projects.include? project })
     end
@@ -86,9 +96,11 @@ module Todo
     #
     # Example:
     #
-    #   list = Todo::List.new "/path/to/list"
-    #   list.by_done #=> Will be a new list with only tasks marked with
-    #                    an [x]
+    #   list = Todo::List.new("/path/to/list")
+    #   list.by_done
+    #   # => <Todo::List> filtered by tasks that are done
+    #
+    # @return [Todo::List]
     def by_done
       List.new(select(&:done?))
     end
@@ -97,16 +109,19 @@ module Todo
     #
     # Example:
     #
-    #   list = Todo::List.new "/path/to/list"
-    #   list.by_not_done #=> Will be a new list with only incomplete tasks
+    #   list = Todo::List.new("/path/to/list")
+    #   list.by_not_done
+    #   # => <Todo::List> filtered by tasks that are not done
+    #
+    # @return [Todo::List]
     def by_not_done
       List.new(select { |task| task.done? == false })
     end
 
     # Saves the list to the original file location.
     #
-    # Warning: This is a destructive operation and will overwrite what is
-    # currently there.
+    # Warning: This is a destructive operation and will overwrite any existing
+    # content in the file. It does not attempt to diff and append changes.
     #
     # If no `path` is specified in the constructor then an error is raised.
     def save!

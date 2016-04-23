@@ -1,5 +1,5 @@
 module Todo
-  # Parsing and extraction of the core syntax fragments in todo.txt lines.
+  # Supports parsing and extracting core syntax fragments from todo.txt lines.
   module Syntax
     # The regex used to match contexts.
     CONTEXTS_PATTERN = /(?:\s+|^)@[^\s]+/

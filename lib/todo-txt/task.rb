@@ -34,14 +34,15 @@ module Todo
     # Example:
     #
     #   task = Todo::Task.new("(A) @context +project Hello!")
-    #   task.raw #=> "(A) @context +project Hello!"
+    #   task.raw
+    #   # => "(A) @context +project Hello!"
     attr_reader :raw
 
     # Returns the task's creation date, if any.
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) 2012-03-04 Task."
+    #   task = Todo::Task.new("(A) 2012-03-04 Task.")
     #   task.created_on
     #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
     #
@@ -54,9 +55,9 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "x 2012-03-04 Task."
+    #   task = Todo::Task.new("x 2012-03-04 Task.")
     #   task.completed_on
-    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #   # => <Date: 2012-03-04 (4911981/2,0,2299161)>
     #
     # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
     # format. Dates in any other format will be classed as malformed and this
@@ -67,9 +68,9 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) This is a task. due:2012-03-04"
+    #   task = Todo::Task.new("(A) This is a task. due:2012-03-04")
     #   task.due_on
-    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #   # => <Date: 2012-03-04 (4911981/2,0,2299161)>
     #
     # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
     # format. Dates in any other format will be classed as malformed and this
@@ -80,27 +81,31 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) Some task."
-    #   task.priority #=> "A"
+    #   task = Todo::Task.new("(A) Some task.")
+    #   task.priority
+    #   # => "A"
     #
     #   task = Todo::Task.new "Some task."
-    #   task.priority #=> nil
+    #   task.priority
+    #   # => nil
     attr_reader :priority
 
     # Returns an array of all the @context annotations.
     #
     # Example:
     #
-    #   task = Todo:Task.new "(A) @context Testing!"
-    #   task.context #=> ["@context"]
+    #   task = Todo:Task.new("(A) @context Testing!")
+    #   task.context
+    #   # => ["@context"]
     attr_reader :contexts
 
     # Returns an array of all the +project annotations.
     #
     # Example:
     #
-    #   task = Todo:Task.new "(A) +test Testing!"
-    #   task.projects #=> ["+test"]
+    #   task = Todo:Task.new("(A) +test Testing!")
+    #   task.projects
+    #   # => ["+test"]
     attr_reader :projects
 
     # Gets just the text content of the todo, without the priority, contexts
@@ -108,34 +113,21 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) @test Testing!"
-    #   task.text #=> "Testing!"
+    #   task = Todo::Task.new("(A) @test Testing!")
+    #   task.text
+    #   # => "Testing!"
     def text
       @text ||= extract_item_text(raw)
     end
 
-    # Returns the task's creation date, if any.
-    #
-    # Example:
-    #
-    #   task = Todo::Task.new "(A) 2012-03-04 Task."
-    #   task.date
-    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
-    #
-    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
-    # format. Dates in any other format will be classed as malformed and this
-    # method will return nil.
-    #
-    # Deprecated
+    # Deprecated. See: #created_on
     def date
       logger.warn("`Task#date` is deprecated, use `Task#created_on` instead.")
 
       @created_on
     end
 
-    # Returns the raw content of the original task line.
-    #
-    # Deprecated
+    # Deprecated. See: #raw
     def orig
       logger.warn("`Task#orig` is deprecated, use `Task#raw` instead.")
 
@@ -148,7 +140,7 @@ module Todo
     #
     #   task = Todo::Task.new("This task is overdue! due:#{Date.today - 1}")
     #   task.overdue?
-    #   #=> true
+    #   # => true
     def overdue?
       !due_on.nil? && due_on < Date.today
     end
@@ -157,13 +149,13 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task = Todo::Task.new("x 2012-12-08 Task.")
     #   task.done?
-    #   #=> true
+    #   # => true
     #
-    #   task = Todo::Task.new "Task."
+    #   task = Todo::Task.new("Task.")
     #   task.done?
-    #   #=> false
+    #   # => false
     def done?
       @is_completed
     end
@@ -172,17 +164,16 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "2012-12-08 Task."
-    #   task.done?
-    #   #=> false
+    #   task = Todo::Task.new("2012-12-08 Task.")
     #
-    #   task.do!
     #   task.done?
-    #   #=> true
-    #   task.created_on
-    #   #=> <Date: 2012-12-08 (4911981/2,0,2299161)>
-    #   task.completed_on
-    #   #=> # the current date
+    #   # => false
+    #
+    #   # Complete the task
+    #   task.do!
+    #
+    #   task.done?
+    #   # => true
     def do!
       @completed_on = Date.today
       @is_completed = true
@@ -193,17 +184,15 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "x 2012-12-08 2012-03-04 Task."
+    #   task = Todo::Task.new("x 2012-12-08 2012-03-04 Task.")
     #   task.done?
-    #   #=> true
+    #   # => true
     #
+    #   # Undo the completed task
     #   task.undo!
+    #
     #   task.done?
-    #   #=> false
-    #   task.created_on
-    #   #=> <Date: 2012-03-04 (4911981/2,0,2299161)>
-    #   task.completed_on
-    #   #=> nil
+    #   # => false
     def undo!
       @completed_on = nil
       @is_completed = false
@@ -234,17 +223,20 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "x 2012-12-08 Task."
+    #   task = Todo::Task.new("x 2012-12-08 Task.")
     #   task.done?
-    #   #=> true
+    #   # => true
+    #
+    #   # Toggle between complete and incomplete
+    #   task.toggle!
+    #
+    #   task.done?
+    #   # => false
     #
     #   task.toggle!
-    #   task.done?
-    #   #=> false
     #
-    #   task.toggle!
     #   task.done?
-    #   #=> true
+    #   # => true
     def toggle!
       done? ? undo! : do!
     end
@@ -253,9 +245,9 @@ module Todo
     #
     # Example:
     #
-    #   task = Todo::Task.new "(A) 2012-12-08 Task"
+    #   task = Todo::Task.new("(A) 2012-12-08 Task")
     #   task.to_s
-    #   #=> "(A) 2012-12-08 Task"
+    #   # => "(A) 2012-12-08 Task"
     def to_s
       [
         done? && "x #{completed_on}",
@@ -272,8 +264,8 @@ module Todo
     #
     # Example:
     #
-    #   task1 = Todo::Task.new "(A) Priority A."
-    #   task2 = Todo::Task.new "(B) Priority B."
+    #   task1 = Todo::Task.new("(A) Priority A.")
+    #   task2 = Todo::Task.new("(B) Priority B.")
     #
     #   task1 > task2
     #   # => true
