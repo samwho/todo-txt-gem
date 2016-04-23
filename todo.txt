@@ -16,3 +16,4 @@ x rename lib path to match standard gem conventions +refactor
 x 2016-04-23 tidy up code examples in doc comments to match ruby styleguide conventions +refactor +docs
 consider renaming or aliasing `#done?` to `#complete?` +api +refactor
 add complementary method returning opposite of `#done?` to provide symmetry +api
+restructure test specs to reflect different core concerns and areas of functionality +refactor
