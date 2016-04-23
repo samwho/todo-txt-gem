@@ -1,9 +1,9 @@
 require 'logger'
-require 'todo-txt/logger'
-require 'todo-txt/options'
-require 'todo-txt/syntax'
-require 'todo-txt/list'
-require 'todo-txt/task'
+require 'todo/logger'
+require 'todo/options'
+require 'todo/syntax'
+require 'todo/list'
+require 'todo/task'
 
 # Allows for easy management of task lists and tasks in the todo.txt format.
 module Todo

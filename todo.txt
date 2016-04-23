@@ -12,7 +12,7 @@ remove deprecated date method from task +api
 pass in options as an instance rather than make it always global +refactor +api
 save a backup of an existing todo file when the IO object is read in +feature
 extract `due:` formatting into a more general syntax for adding tags +feature +refactor +api
-rename lib path to match standard gem conventions +refactor
+x rename lib path to match standard gem conventions +refactor
 x 2016-04-23 tidy up code examples in doc comments to match ruby styleguide conventions +refactor +docs
 consider renaming or aliasing `#done?` to `#complete?` +api +refactor
 add complementary method returning opposite of `#done?` to provide symmetry +api
