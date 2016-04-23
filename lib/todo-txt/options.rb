@@ -1,17 +1,4 @@
 module Todo
-  class << self
-    attr_accessor :options_instance
-  end
-
-  def self.options
-    self.options_instance ||= Options.new
-  end
-
-  def self.customize
-    self.options_instance ||= Options.new
-    yield(options_instance)
-  end
-
   # Options for default preferences and library settings that can be customized
   # by clients of the gem.
   class Options

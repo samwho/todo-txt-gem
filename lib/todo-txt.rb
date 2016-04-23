@@ -1,6 +1,1 @@
-require 'logger'
-require 'todo-txt/logger'
-require 'todo-txt/options'
-require 'todo-txt/syntax'
-require 'todo-txt/list'
-require 'todo-txt/task'
+require_relative 'todo'

@@ -1,2 +1,5 @@
+AllCops:
+  Exclude:
+    - 'lib/todo-txt.rb'
 StringLiterals:
   Enabled: false
