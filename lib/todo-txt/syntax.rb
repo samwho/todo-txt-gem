@@ -76,8 +76,8 @@ module Todo
 
     # Checks whether the given todo item has a completion flag set.
     #
-    # This provides support for ad-hoc handwritten lists where the completed flag
-    # is set but there is no completed date.
+    # This provides support for ad-hoc handwritten lists where the completed
+    # flag is set but there is no completed date.
     #
     # @param line [String] the todo item to be processed
     # @return [Boolean]
