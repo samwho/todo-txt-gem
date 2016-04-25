@@ -12,10 +12,19 @@ module Todo
     attr_accessor :options_instance
   end
 
+  # Global access to custom options.
+  #
+  # Example:
+  #
+  #   if Todo.options.require_completed_on
+  #     # Do something
+  #   end
   def self.options
     self.options_instance ||= Options.new
   end
 
+  # Customize global list behaviour.
+  #
   # Example:
   #
   #   Todo.customize do |opts|
