@@ -21,27 +21,26 @@ module Todo
   #   list = Todo::List.new(tasks)
   class List < Array
     def initialize(list)
-      if list.is_a? Array
-        # No file path was given.
+      case list
+      when Array
         @path = nil
 
-        # If path is an array, loop over it, adding to self.
-        list.each do |task|
-          # If it's a string, make a new task out of it.
-          if task.is_a? String
-            push Task.new task
-          # If it's a task, just add it.
-          elsif task.is_a? Todo::Task
-            push task
+        tasks = list.map do |item|
+          case item
+          when String then Task.new(item)
+          when Task then item
+          else
+            raise "Cannot add #{item.class} to list."
           end
         end
-      elsif list.is_a? String
+
+        concat(tasks)
+
+      when String
         @path = list
 
-        # Read in lines from file, create Todo::Tasks out of them and push them
-        # onto self.
         File.open(list) do |file|
-          file.each_line { |line| push Task.new(line) }
+          file.each_line { |line| push(Task.new(line)) }
         end
       end
     end
