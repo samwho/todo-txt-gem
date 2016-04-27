@@ -4,6 +4,7 @@ require 'todo/options'
 require 'todo/syntax'
 require 'todo/list'
 require 'todo/task'
+require 'todo/file'
 
 # Allows for easy management of task lists and tasks in the todo.txt format.
 module Todo

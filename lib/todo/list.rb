@@ -23,8 +23,6 @@ module Todo
     def initialize(list)
       case list
       when Array
-        @path = nil
-
         tasks = list.map do |item|
           case item
           when String then Task.new(item)
@@ -38,10 +36,7 @@ module Todo
 
       when String
         @path = list
-
-        File.open(list) do |file|
-          file.each_line { |line| push(Task.new(line)) }
-        end
+        concat(File.read(list))
       end
     end
 
@@ -126,11 +121,7 @@ module Todo
     def save!
       raise "No path specified." unless path
 
-      File.open(path, 'w') do |outfile|
-        each do |task|
-          outfile.puts(task.to_s)
-        end
-      end
+      File.write(path, self)
     end
   end
 end
