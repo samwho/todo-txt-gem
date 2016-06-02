@@ -7,17 +7,17 @@ describe Todo::List do
 
   context 'create with an array' do
     it 'successfully creates an object' do
-      array = Array.new
-      array.push "(A) A string task!"
-      array.push Todo::Task.new("(A) An actual task!")
-      expect(Todo::List.new array).not_to eq(nil)
+      items = []
+      items << "(A) A string task!"
+      items << Todo::Task.new("(A) An actual task!")
+      expect(Todo::List.new(items).length).to eq(2)
     end
 
     it 'does not have a path' do
-      array = Array.new
-      array.push "(A) A string task!"
-      array.push Todo::Task.new("(A) An actual task!")
-      expect(Todo::List.new(array).path).to eq(nil)
+      items = []
+      items << "(A) A string task!"
+      items << Todo::Task.new("(A) An actual task!")
+      expect(Todo::List.new(items).path).to eq(nil)
     end
   end
 
@@ -38,12 +38,9 @@ describe Todo::List do
   end
 
   it 'accepts a mix of tasks and strings' do
-    l = Todo::List.new([
-      "A task!",
-      Todo::Task.new("Another task!"),
-    ])
+    mixed = Todo::List.new(["A task!", Todo::Task.new("Another task!")])
 
-    expect(l.length).to eq(2)
+    expect(mixed.length).to eq(2)
   end
 
   it 'has the correct path' do
@@ -97,9 +94,7 @@ describe Todo::List do
   end
 
   it 'should be able to filter by project, context and priority' do
-    filtered = list.by_project('+project').
-                    by_context('@context').
-                    by_priority('C')
+    filtered = list.by_project('+project').by_context('@context').by_priority('C')
 
     # Make sure some data was actually checked
     expect(filtered.length).to be > 0
