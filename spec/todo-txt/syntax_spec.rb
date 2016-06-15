@@ -115,20 +115,6 @@ describe Todo::Syntax do
     end
   end
 
-  describe '#extract_due_on_date' do
-    specify 'empty task' do
-      expect(extract_due_on_date('')).to be nil
-    end
-
-    specify 'task without due date' do
-      expect(extract_due_on_date('something to do')).to be nil
-    end
-
-    specify 'task with due date' do
-      expect(extract_due_on_date('something to do due:2016-03-30')).to eq(Date.new(2016, 03, 30))
-    end
-  end
-
   describe '#extract_tags' do
     specify 'empty task' do
       expect(extract_tags('')).to eq({})
@@ -140,6 +126,10 @@ describe Todo::Syntax do
 
     specify 'task with due date' do
       expect(extract_tags('something to do due:2016-03-30')).to eq('due' => '2016-03-30')
+    end
+
+    specify 'task with case-insensitive due date' do
+      expect(extract_tags('something to do DUE:2016-03-30')).to eq('due' => '2016-03-30')
     end
 
     specify 'task with multiple tags' do

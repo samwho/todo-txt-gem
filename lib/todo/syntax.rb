@@ -88,28 +88,13 @@ module Todo
       line[0] == COMPLETED_FLAG && line[1] == SINGLE_SPACE
     end
 
-    # Extracts the completion date for the given todo item.
-    # Returns nil if a valid date is not found.
+    # Extracts the collection of tag annotations for the given todo item.
+    # Returns an empty hash if no tags are found.
     #
     # @param line [String] the todo item to be processed
-    # @return [Date] the due date of the line
-    def extract_due_on_date(line)
-      date = DUE_ON_PATTERN.match(line)
-      begin
-        Date.parse(date[1]) if date
-      rescue ArgumentError
-        return nil # The given date is not valid
-      end
-    end
-
-
-    # Extracts the completion date for the given todo item.
-    # Returns nil if a valid date is not found.
-    #
-    # @param line [String] the todo item to be processed
-    # @return [Date] the due date of the line
+    # @return [Hash] the collection of tag annotations
     def extract_tags(line)
-      line.scan(TAGS_PATTERN).to_h
+      line.scan(TAGS_PATTERN).map { |tag, val| [tag.downcase, val] }.to_h
     end
 
     # Extract the list of `@context` tags out of the task line.

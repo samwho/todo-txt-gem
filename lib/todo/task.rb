@@ -16,7 +16,7 @@ module Todo
       @raw = line
       @priority = extract_priority(raw)
       @created_on = extract_created_on(raw)
-      @due_on = extract_due_on_date(raw)
+      @tags = extract_tags(raw)
       @contexts ||= extract_contexts(raw)
       @projects ||= extract_projects(raw)
 
@@ -64,18 +64,18 @@ module Todo
     # attribute will be nil.
     attr_reader :completed_on
 
-    # Returns the task's due date, if any.
+    # Returns tag annotations embedded in the list item.
     #
     # Example:
     #
-    #   task = Todo::Task.new("(A) This is a task. due:2012-03-04")
-    #   task.due_on
-    #   # => <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #   task = Todo::Task.new("Some task. due:2016-06-16 hello:world")
+    #   task.tags
+    #   # => { 'due' => '2016-06-16', 'hello' => 'world' }
     #
-    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
-    # format. Dates in any other format will be classed as malformed and this
-    # attribute will be nil.
-    attr_reader :due_on
+    #   task = Todo::Task.new("Some task.")
+    #   task.tags.empty?
+    #   # => true
+    attr_reader :tags
 
     # Returns the priority, if any.
     #
@@ -132,6 +132,25 @@ module Todo
       logger.warn("`Task#orig` is deprecated, use `Task#raw` instead.")
 
       raw
+    end
+
+    # Returns the task's due date, if any.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new("(A) This is a task. due:2012-03-04")
+    #   task.due_on
+    #   # => <Date: 2012-03-04 (4911981/2,0,2299161)>
+    #
+    # Dates _must_ be in the YYYY-MM-DD format as specified in the todo.txt
+    # format. Dates in any other format will be classed as malformed and this
+    # attribute will be nil.
+    def due_on
+      begin
+        Date.parse(tags['due']) if tags['due'] =~ /(\d{4}-\d{2}-\d{2})/
+      rescue ArgumentError
+        return nil
+      end
     end
 
     # Returns whether a task's due date is in the past.
@@ -256,7 +275,7 @@ module Todo
         text,
         contexts.join(' '),
         projects.join(' '),
-        due_on && "due:#{due_on}"
+        tags.map { |tag,val| "#{tag}:#{val}" }.join(' ')
       ].grep(String).join(' ').strip
     end
 
