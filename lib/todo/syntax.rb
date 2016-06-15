@@ -19,6 +19,9 @@ module Todo
     # The regex used to match due date.
     DUE_ON_PATTERN = /(?:due:)(\d{4}-\d{2}-\d{2})(?:\s+|$)/i
 
+    # The regex used to match generic tags.
+    TAGS_PATTERN = /([a-z]+):([a-z0-9_-]+)/i
+
     # Extracts the readable text content of a task line, stripping out all the
     # discrete pieces of metadata (priority, dates, completion flag, projects,
     # contexts, etc).
@@ -97,6 +100,16 @@ module Todo
       rescue ArgumentError
         return nil # The given date is not valid
       end
+    end
+
+
+    # Extracts the completion date for the given todo item.
+    # Returns nil if a valid date is not found.
+    #
+    # @param line [String] the todo item to be processed
+    # @return [Date] the due date of the line
+    def extract_tags(line)
+      line.scan(TAGS_PATTERN).to_h
     end
 
     # Extract the list of `@context` tags out of the task line.

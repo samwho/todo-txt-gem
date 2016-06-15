@@ -129,6 +129,24 @@ describe Todo::Syntax do
     end
   end
 
+  describe '#extract_tags' do
+    specify 'empty task' do
+      expect(extract_tags('')).to eq({})
+    end
+
+    specify 'task without tag' do
+      expect(extract_tags('something to do')).to be {}
+    end
+
+    specify 'task with due date' do
+      expect(extract_tags('something to do due:2016-03-30')).to eq('due' => '2016-03-30')
+    end
+
+    specify 'task with multiple tags' do
+      expect(extract_tags('something to do hello:world and foo:bar')).to eq('hello' => 'world', 'foo' => 'bar')
+    end
+  end
+
   describe '#extract_item_text' do
     specify 'empty task' do
       expect(extract_item_text('')).to eq('')
