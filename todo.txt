@@ -11,7 +11,7 @@ consider rewriting file write tests with mocking and stringio +refactor +build
 remove deprecated date and orig methods from task +api
 pass in options as an instance rather than make it always global +refactor +api
 save a backup of an existing todo file when the IO object is read in +feature
-extract `due:` formatting into a more general syntax for adding tags +feature +refactor +api
+x 2016-06-16 extract `due:` formatting into a more general syntax for adding tags +feature +refactor +api
 x rename lib path to match standard gem conventions +refactor
 x 2016-04-23 tidy up code examples in doc comments to match ruby styleguide conventions +refactor +docs
 consider renaming or aliasing `#done?` to `#complete?` +api +refactor
