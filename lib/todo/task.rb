@@ -70,7 +70,7 @@ module Todo
     #
     #   task = Todo::Task.new("Some task. due:2016-06-16 hello:world")
     #   task.tags
-    #   # => { 'due' => '2016-06-16', 'hello' => 'world' }
+    #   # => { :due => '2016-06-16', :hello => 'world' }
     #
     #   task = Todo::Task.new("Some task.")
     #   task.tags.empty?
@@ -147,7 +147,7 @@ module Todo
     # attribute will be nil.
     def due_on
       begin
-        Date.parse(tags['due']) if tags['due'] =~ /(\d{4}-\d{2}-\d{2})/
+        Date.parse(tags[:due]) if tags[:due] =~ /(\d{4}-\d{2}-\d{2})/
       rescue ArgumentError
         return nil
       end

@@ -92,9 +92,9 @@ module Todo
     # Returns an empty hash if no tags are found.
     #
     # @param line [String] the todo item to be processed
-    # @return [Hash] the collection of tag annotations
+    # @return [Hash<Symbol,String>] the collection of tag annotations
     def extract_tags(line)
-      line.scan(TAGS_PATTERN).map { |tag, val| [tag.downcase, val] }.to_h
+      line.scan(TAGS_PATTERN).map { |tag, val| [tag.downcase.to_sym, val] }.to_h
     end
 
     # Extract the list of `@context` tags out of the task line.

@@ -125,15 +125,15 @@ describe Todo::Syntax do
     end
 
     specify 'task with due date' do
-      expect(extract_tags('something to do due:2016-03-30')).to eq('due' => '2016-03-30')
+      expect(extract_tags('something to do due:2016-03-30')).to eq(:due => '2016-03-30')
     end
 
     specify 'task with case-insensitive due date' do
-      expect(extract_tags('something to do DUE:2016-03-30')).to eq('due' => '2016-03-30')
+      expect(extract_tags('something to do DUE:2016-03-30')).to eq(:due => '2016-03-30')
     end
 
     specify 'task with multiple tags' do
-      expect(extract_tags('something to do hello:world and foo:bar')).to eq('hello' => 'world', 'foo' => 'bar')
+      expect(extract_tags('something to do hello:world and foo:bar')).to eq(:hello => 'world', :foo => 'bar')
     end
   end
 
