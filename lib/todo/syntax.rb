@@ -13,7 +13,9 @@ module Todo
     # The regex used to match creation date.
     CREATED_ON_PATTERN = /(?:^|-\d{2}\s|\)\s)(\d{4}-\d{2}-\d{2})\s/
 
-    # The regex used to match completion.
+    COMPLETED_FLAG_PATTERN = /^x\s+/
+
+    # The regex used to match completion date.
     COMPLETED_ON_PATTERN = /^x\s+(\d{4}-\d{2}-\d{2})\s+/
 
     # The regex used to match due date.
@@ -30,6 +32,7 @@ module Todo
     # @return [String] the text content of the item
     def extract_item_text(line)
       line.gsub(COMPLETED_ON_PATTERN, '')
+          .gsub(COMPLETED_FLAG_PATTERN, '')
           .gsub(PRIORITY_PATTERN, '')
           .gsub(CREATED_ON_PATTERN, '')
           .gsub(CONTEXTS_PATTERN, '')

@@ -302,6 +302,11 @@ describe Todo::Task do
         expect(task.done?).to be true
       end
 
+      it '#to_s should round-trip to identical #raw output' do
+        task = Todo::Task.new('x This is done!')
+        expect(task.to_s).to eq(task.raw)
+      end
+
       after do
         Todo.options.reset
       end

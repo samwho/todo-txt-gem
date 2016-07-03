@@ -260,25 +260,6 @@ module Todo
       done? ? undo! : do!
     end
 
-    # Returns this task as a string.
-    #
-    # Example:
-    #
-    #   task = Todo::Task.new("(A) 2012-12-08 Task")
-    #   task.to_s
-    #   # => "(A) 2012-12-08 Task"
-    def to_s
-      [
-        done? && "x #{completed_on}",
-        priority && "(#{priority})",
-        created_on.to_s,
-        text,
-        contexts.join(' '),
-        projects.join(' '),
-        tags.map { |tag,val| "#{tag}:#{val}" }.join(' ')
-      ].grep(String).join(' ').strip
-    end
-
     # Compares the priorities of two tasks.
     #
     # Example:
@@ -304,6 +285,55 @@ module Todo
       else
         other.priority <=> priority
       end
+    end
+
+    # Returns this task as a string.
+    #
+    # Example:
+    #
+    #   task = Todo::Task.new("(A) 2012-12-08 Task")
+    #   task.to_s
+    #   # => "(A) 2012-12-08 Task"
+    def to_s
+      [
+        print_done_marker,
+        print_priority,
+        created_on.to_s,
+        text,
+        print_contexts,
+        print_projects,
+        print_tags
+      ].reject { |item| !item || item.nil? || item.empty? }.join(' ')
+    end
+
+    private
+
+    def print_done_marker
+      return unless done?
+
+      if completed_on.nil?
+        COMPLETED_FLAG
+      else
+        "#{COMPLETED_FLAG} #{completed_on}"
+      end
+    end
+
+    def print_priority
+      return unless priority
+
+      "(#{priority})"
+    end
+
+    def print_contexts
+      contexts.join(' ')
+    end
+
+    def print_projects
+      projects.join(' ')
+    end
+
+    def print_tags
+      tags.map { |tag, val| "#{tag}:#{val}" }.join(' ')
     end
   end
 end

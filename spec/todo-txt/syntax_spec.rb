@@ -153,5 +153,9 @@ describe Todo::Syntax do
     specify 'completed task with projects and context' do
       expect(extract_item_text('x 2016-03-30 2016-03-29 something to do +experiment @work')).to eq('something to do')
     end
+
+    specify 'completed task without completion date' do
+      expect(extract_item_text('x completed task')).to eq('completed task')
+    end
   end
 end
