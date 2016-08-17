@@ -9,7 +9,7 @@ use << operation to move tasks between lists +api +feature
 create github issue with roadmap for 1.0 release +feature +api
 consider rewriting file write tests with mocking and stringio +refactor +build
 remove deprecated date and orig methods from task +api
-pass in options as an instance rather than make it always global +refactor +api
+x 2016-08-18 pass in options as an instance rather than make it always global +refactor +api
 save a backup of an existing todo file when the IO object is read in +feature
 x 2016-06-16 extract `due:` formatting into a more general syntax for adding tags +feature +refactor +api
 x rename lib path to match standard gem conventions +refactor

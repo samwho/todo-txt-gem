@@ -434,4 +434,28 @@ describe Todo::Task do
       task.orig
     end
   end
+
+  describe 'customizable options' do
+    before(:all) do
+      Todo.customize do |options|
+        options.require_completed_on = false
+      end
+    end
+
+    after(:all) do
+      Todo.options.reset
+    end
+
+    it 'should default to global options' do
+      task = Todo::Task.new('x this is an outstanding task')
+      expect(task.done?).to eq(true)
+    end
+
+    it 'accepts options instance' do
+      options = Todo::Options.new
+      options.require_completed_on = true
+      task = Todo::Task.new('x this is an outstanding task', options)
+      expect(task.done?).to eq(false)
+    end
+  end
 end

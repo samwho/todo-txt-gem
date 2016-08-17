@@ -12,7 +12,9 @@ module Todo
     include Todo::Logger
     include Todo::Syntax
 
-    def initialize(line)
+    # @param line [String]
+    # @param options [Todo::Options]
+    def initialize(line, options=Todo.options)
       @raw = line
       @priority = extract_priority(raw)
       @created_on = extract_created_on(raw)
@@ -20,7 +22,7 @@ module Todo
       @contexts ||= extract_contexts(raw)
       @projects ||= extract_projects(raw)
 
-      if Todo.options.require_completed_on
+      if options.require_completed_on
         @completed_on = extract_completed_date(raw)
         @is_completed = !@completed_on.nil?
       else
