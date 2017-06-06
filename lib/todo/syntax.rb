@@ -38,6 +38,7 @@ module Todo
           .gsub(CONTEXTS_PATTERN, '')
           .gsub(PROJECTS_PATTERN, '')
           .gsub(DUE_ON_PATTERN, '')
+          .gsub(TAGS_PATTERN, '')
           .strip
     end
 
