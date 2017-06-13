@@ -135,6 +135,10 @@ describe Todo::Syntax do
     specify 'task with multiple tags' do
       expect(extract_tags('something to do hello:world and foo:bar')).to eq(:hello => 'world', :foo => 'bar')
     end
+
+    specify 'task with uppercase letters' do
+      expect(extract_tags('something to do TagKey:TagValue tagKey:tagValue')).to eq(:TagKey => 'TagValue', :tagKey => 'tagValue')
+    end
   end
 
   describe '#extract_item_text' do
@@ -146,8 +150,8 @@ describe Todo::Syntax do
       expect(extract_item_text('something to do')).to eq('something to do')
     end
 
-    specify 'task with date, priority, projects and context' do
-      expect(extract_item_text('(A) 2016-03-29 something to do +experiment @work')).to eq('something to do')
+    specify 'task with date, priority, projects, context and tags' do
+      expect(extract_item_text('(A) 2016-03-29 something to do tag:val +experiment @work')).to eq('something to do')
     end
 
     specify 'completed task with projects and context' do
