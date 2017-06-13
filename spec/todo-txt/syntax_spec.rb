@@ -137,7 +137,7 @@ describe Todo::Syntax do
     end
 
     specify 'task with uppercase letters' do
-      expect(extract_tags('something to do TagKey:TagValue tagKey:tagValue')).to eq(:TagKey => 'TagValue', :tagKey => 'tagValue')
+      expect(extract_tags('something to do TagKey:TagValue attrKey:attrValue')).to eq(:tagkey => 'TagValue', :attrkey => 'attrValue')
     end
   end
 
