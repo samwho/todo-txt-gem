@@ -7,6 +7,6 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/samwho/todo-txt-gem'
   s.description = 'Allows for simple parsing of todo.txt files, as per Gina Trapani\'s todo.txt project.'
   s.required_ruby_version = '>= 2.2'
-  s.license = 'GPL-2'
+  s.license = 'GPL-2.0'
   s.files = `git ls-files`.split(/\n/)
 end
